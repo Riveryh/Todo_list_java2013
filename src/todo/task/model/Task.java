@@ -1,89 +1,95 @@
 package todo.task.model;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Task{
-	static private int taskCounter=0;
-	private int serialNumber;
-	private Date startDate;
-	private Date dueDate;
-	private Date establishedDate;
-	private String title;
-	private String discription;
-	private boolean isCompleted;
+public class Task implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	static private int __taskCounter=0;
+	private int __serialNumber;
+	private Date __startDate;
+	private Date __dueDate;
+	private Date __establishedDate;
+	private String __title;
+	private String __discription;
+	private boolean __isCompleted;
 	
 	
 	
 	//constructors
 	public Task(){
-		serialNumber = taskCounter;
-		taskCounter+=1;
-		this.establishedDate = new Date();
-		this.dueDate         = new Date();
-		this.startDate       = new Date();
-		this.isCompleted	 = false;
-		this.discription	 = null;
+		__serialNumber = __taskCounter;
+		__taskCounter+=1;
+		this.__establishedDate = new Date();
+		this.__dueDate         = new Date();
+		this.__startDate       = new Date();
+		this.__isCompleted	 = false;
+		this.__discription	 = null;
 	}
 	public Task(String title) {
 		this();
-		this.title = title;
+		this.__title = title;
 	}
 	public Task( String title,Date dueDate) {
 		this(title);
-		this.dueDate = dueDate;
+		this.__dueDate = dueDate;
 	}
 	public Task(String title, Date dueDate, String discription) {
 		this(title,dueDate);
-		this.discription = discription;
+		this.__discription = discription;
 	}
 	
 	//ToString overWrite;
 	public String toString(){
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		return title + "\n\t\t\t" + format.format(dueDate);
+		return __title + "\n\t\t\t" + format.format(__dueDate);
 	}
 	
 	
 	//Getters and Setters;
 	public int getSerialNumber() {
-		return serialNumber;
+		return __serialNumber;
 	}
 	public Date getStartDate() {
-		return startDate;
+		return __startDate;
 	}
 	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
+		this.__startDate = startDate;
 	}
 	public Date getDueDate() {
-		return dueDate;
+		return __dueDate;
 	}
 	public void setDueDate(Date dueDate) {
-		this.dueDate = dueDate;
+		this.__dueDate = dueDate;
 	}
 	public Date getEstablishedDate() {
-		return establishedDate;
+		return __establishedDate;
 	}
 	public void setEstablishedDate(Date establishedDate) {
-		this.establishedDate = establishedDate;
+		this.__establishedDate = establishedDate;
 	}
 	public String getTitle() {
-		return title;
+		return __title;
 	}
 	public void setTitle(String title) {
-		this.title = title;
+		this.__title = title;
 	}
 	public String getDiscription() {
-		return discription;
+		return __discription;
 	}
 	public void setDiscription(String discription) {
-		this.discription = discription;
+		this.__discription = discription;
 	}
 	public boolean isCompleted() {
-		return isCompleted;
+		return __isCompleted;
 	}
 	public void setCompleted(boolean isCompleted) {
-		this.isCompleted = isCompleted;
+		this.__isCompleted = isCompleted;
 	}
 	
 }
