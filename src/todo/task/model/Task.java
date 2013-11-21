@@ -46,7 +46,7 @@ public class Task implements Serializable{
 	
 	//ToString overWrite;
 	public String toString(){
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat format = new SimpleDateFormat("E");
 		return __title + "\n\t\t\t" + format.format(__dueDate);
 	}
 	

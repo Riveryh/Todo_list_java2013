@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -79,10 +80,13 @@ public class TaskList extends LinkedList<Task> {
 	 * @since 2013-11-18
 	 */
 	public String toString(){
+		Task task;
 		ListIterator<Task> iterator = this.listIterator();
 		String buffer="";
 		while(iterator.hasNext()){
-			buffer = buffer + iterator.next() + "\n";
+			task = iterator.next();
+			buffer = buffer + this.indexOf(task) + "  " + task.getTitle() + "\t\t" 
+							+ (new SimpleDateFormat("E")).format(task.getDueDate()) +"\n";
 		}
 		return buffer+"";
 	}
