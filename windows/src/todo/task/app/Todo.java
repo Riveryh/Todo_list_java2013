@@ -3,11 +3,8 @@ package todo.task.app;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Scanner;
-import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -70,12 +67,11 @@ public class Todo {
 			printList(list);
 			buffer = sc.nextLine();
 		}
+		list.save();
 	}
 	
 	public static void printList(TaskList list){
 		System.out.flush();
-		//System.out.println("------------TODO LIST-----------");
-		//System.out.println("Task                     DueDate");
 		System.out.println("--------------------------------");
 		System.out.print(list);
 		System.out.println("--------------------------------");

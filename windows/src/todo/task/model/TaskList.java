@@ -101,7 +101,7 @@ public class TaskList extends LinkedList<Task> {
 	public void move(int indexA, int indexB)throws IndexOutOfBoundsException{
 		Task task = this.get(indexA);
 		this.remove(indexA);
-		this.add(indexB,task);
+		this.add(indexB,task);//add()方法会自动调用save(),所以无需单独调用save();
 	}
 	
 	/**
