@@ -9,6 +9,12 @@ import todo.task.model.TaskList;
 
 public class MainWindow{
 
+        /**
+         * 程序入口，读取相应的设置以及文件，获得TaskList对象，并生成TaskListFrame;
+         * @param args
+         * @throws ClassNotFoundException
+         * @throws IOException 
+         */
 	public static void main(String[] args) throws ClassNotFoundException, IOException {
 		TaskList list;
 		String fileName = "TaskListFile.dat";
@@ -24,7 +30,7 @@ public class MainWindow{
                 JFrame.setDefaultLookAndFeelDecorated(true);
 		JFrame frame=new TaskListFrame(list);
                 
-                
+                frame.setTitle("TODO");
 		frame.pack();
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

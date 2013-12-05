@@ -5,6 +5,11 @@
  */
 package todo.gui;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.Iterator;
+import javax.swing.DefaultListModel;
+import todo.task.model.Task;
 import todo.task.model.TaskList;
 
 /**
@@ -16,17 +21,41 @@ public class TaskListFrame extends javax.swing.JFrame {
     private TaskList _list;
 
     /**
-     * Creates new form TaskListFrame
+     * 构造函数，接受TaskList参数并将其引用保存在类中,
+     * 实际上不允许使用无参数构造函数，保留下来是GUI的要求.
+     * 
+     * @author: huangyuhan
+     *
      */
-    public TaskListFrame() {
-       
+    public TaskListFrame() {  
     }
     public TaskListFrame(TaskList list){
         this();
         _list = list;
-        taskListPanel = new TaskListPanel(_list);
-        this.add(taskListPanel);
-         initComponents();
+        initComponents();
+        
+        /**
+         * 此处用iterator将TaskList中的Task全部转化为一个一个的TaskBox，
+         * 并且添加到TaskListModel中；
+         * TaskListModel保存了jTaskList的数据.
+         */
+        Iterator<Task> iterator = _list.iterator();
+        while(iterator.hasNext()){
+            myListModel.addElement(new TaskBox(iterator.next()));
+        }
+        myTaskList.addMouseListener(new MouseAdapter(){
+            public void mouseClicked(MouseEvent e) {
+                int index = myTaskList.locationToIndex(e.getPoint());
+                TaskBox thisBox = ((TaskBox)myTaskList.getModel().getElementAt(index));
+                thisBox.getCheckBox().setSelected(!thisBox.getCheckBox().isSelected());
+                myTaskList.updateUI();
+            }
+            public void mouseMoved(MouseEvent e){
+                int index = myTaskList.locationToIndex(e.getPoint());
+                myTaskList.setSelectedIndex(index);
+            }
+        });
+        
     }
     
 
@@ -39,51 +68,29 @@ public class TaskListFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jSeparator1 = new javax.swing.JSeparator();
-        todo.gui.TaskListPanel taskListPanel1 = new todo.gui.TaskListPanel(_list);
+        jScrollPane2 = new javax.swing.JScrollPane();
+        myTaskList = new todo.gui.MyTaskList();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setAlwaysOnTop(true);
         setBackground(new java.awt.Color(255, 255, 255));
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
-        jLabel1.setFont(new java.awt.Font("Microsoft YaHei UI", 1, 24)); // NOI18N
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("My Task");
-
-        jSeparator1.setToolTipText("");
+        myTaskList.setModel(myListModel);
+        myTaskList.setCellRenderer(new TaskBox());
+        jScrollPane2.setViewportView(myTaskList);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(55, 55, 55)
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(taskListPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jSeparator1)))
-                .addContainerGap())
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(taskListPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(216, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 503, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 43, Short.MAX_VALUE))
         );
 
         pack();
@@ -128,10 +135,10 @@ public class TaskListFrame extends javax.swing.JFrame {
         
     }
     
-    private TaskListPanel taskListPanel;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private DefaultListModel myListModel = new DefaultListModel();
+    private todo.gui.MyTaskList myTaskList;
     // End of variables declaration//GEN-END:variables
 }
