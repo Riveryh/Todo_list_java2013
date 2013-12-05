@@ -11,6 +11,7 @@ import java.util.Iterator;
 import javax.swing.DefaultListModel;
 import todo.task.model.Task;
 import todo.task.model.TaskList;
+import todo.gui.TaskBox;
 
 /**
  *
@@ -32,29 +33,27 @@ public class TaskListFrame extends javax.swing.JFrame {
     public TaskListFrame(TaskList list){
         this();
         _list = list;
-        initComponents();
-        
-        /**
-         * 此处用iterator将TaskList中的Task全部转化为一个一个的TaskBox，
-         * 并且添加到TaskListModel中；
-         * TaskListModel保存了jTaskList的数据.
-         */
-        Iterator<Task> iterator = _list.iterator();
-        while(iterator.hasNext()){
-            myListModel.addElement(new TaskBox(iterator.next()));
+        initComponents();    
+        Iterator<Task> _iterator = _list.iterator();
+        while(_iterator.hasNext()){
+            this.myTableModel.add(_iterator.next());
         }
-        myTaskList.addMouseListener(new MouseAdapter(){
+        /*
+        myTaskTable.addMouseListener(new MouseAdapter(){
             public void mouseClicked(MouseEvent e) {
-                int index = myTaskList.locationToIndex(e.getPoint());
-                TaskBox thisBox = ((TaskBox)myTaskList.getModel().getElementAt(index));
+                int index = myTaskTable.locationToIndex(e.getPoint());
+                TaskBox thisBox = ((TaskBox)myTaskTable.getModel().getElementAt(index));
                 thisBox.getCheckBox().setSelected(!thisBox.getCheckBox().isSelected());
-                myTaskList.updateUI();
+                myTaskTable.updateUI();
             }
             public void mouseMoved(MouseEvent e){
                 int index = myTaskList.locationToIndex(e.getPoint());
                 myTaskList.setSelectedIndex(index);
             }
-        });
+        });*/
+        
+        
+        
         
     }
     
@@ -68,29 +67,30 @@ public class TaskListFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane2 = new javax.swing.JScrollPane();
-        myTaskList = new todo.gui.MyTaskList();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        myTaskTable = new todo.gui.MyTaskTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setAlwaysOnTop(true);
         setBackground(new java.awt.Color(255, 255, 255));
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
-        myTaskList.setModel(myListModel);
-        myTaskList.setCellRenderer(new TaskBox());
-        jScrollPane2.setViewportView(myTaskList);
+        myTaskTable.setDefaultRenderer(myTaskTable.getColumnClass(0), new TaskBox());
+        myTaskTable.setDefaultEditor(myTaskTable.getColumnClass(0), new TaskBox());
+        myTableModel = myTaskTable.getTableModel();
+        jScrollPane1.setViewportView(myTaskTable);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 503, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 43, Short.MAX_VALUE))
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -131,14 +131,11 @@ public class TaskListFrame extends javax.swing.JFrame {
         });
     }
     
-    public void update(){
-        
-    }
-    
+   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JScrollPane jScrollPane2;
-    private DefaultListModel myListModel = new DefaultListModel();
-    private todo.gui.MyTaskList myTaskList;
+    private javax.swing.JScrollPane jScrollPane1;
+    private todo.gui.MyTableModel myTableModel;
+    private todo.gui.MyTaskTable myTaskTable;
     // End of variables declaration//GEN-END:variables
 }

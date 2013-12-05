@@ -30,35 +30,30 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="jScrollPane2" min="-2" pref="249" max="-2" attributes="0"/>
+          <Group type="102" alignment="0" attributes="0">
+              <Component id="jScrollPane1" min="-2" pref="259" max="-2" attributes="0"/>
+              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+          </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
-              <Component id="jScrollPane2" min="-2" pref="503" max="-2" attributes="0"/>
-              <EmptySpace min="0" pref="43" max="32767" attributes="0"/>
-          </Group>
+          <Component id="jScrollPane1" min="-2" pref="450" max="-2" attributes="0"/>
       </Group>
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Container class="javax.swing.JScrollPane" name="jScrollPane2">
+    <Container class="javax.swing.JScrollPane" name="jScrollPane1">
       <AuxValues>
         <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
       </AuxValues>
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
       <SubComponents>
-        <Component class="todo.gui.MyTaskList" name="myTaskList">
-          <Properties>
-            <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="myListModel" type="code"/>
-            </Property>
-          </Properties>
+        <Component class="todo.gui.MyTaskTable" name="myTaskTable">
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_DeclarationPre" type="java.lang.String" value="private DefaultListModel myListModel = new DefaultListModel();"/>
-            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="myTaskList.setCellRenderer(new TaskBox());"/>
+            <AuxValue name="JavaCodeGenerator_DeclarationPre" type="java.lang.String" value="private todo.gui.MyTableModel myTableModel;"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="myTaskTable.setDefaultRenderer(myTaskTable.getColumnClass(0), new TaskBox());&#xa;myTaskTable.setDefaultEditor(myTaskTable.getColumnClass(0), new TaskBox());&#xa;myTableModel = myTaskTable.getTableModel();"/>
           </AuxValues>
         </Component>
       </SubComponents>
