@@ -30,10 +30,11 @@ public class MainWindow{
                 JFrame.setDefaultLookAndFeelDecorated(true);
 		JFrame frame=new TaskListFrame(list);
                 
+		frame.setVisible(true);
                 frame.setTitle("TODO");
 		frame.pack();
-		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                
 		
 		System.out.println("exit");
 	

@@ -5,6 +5,9 @@
  */
 package todo.gui;
 
+import java.util.EventListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import todo.task.model.Task;
 
@@ -16,6 +19,10 @@ public class MyTableModel extends DefaultTableModel{
    
     public MyTableModel(){
         super(0,1);
+    }
+    public MyTableModel(MyTaskTable table){
+        this();
+        this.addTableModelListener(table);
     }
     public void add(Task task){
         TaskBox[] _taskBox = new TaskBox[1];

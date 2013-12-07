@@ -45,10 +45,10 @@ public class TaskList extends LinkedList<Task> {
 		return true;
 	}
 	public void add(String title){
-		this.add(new Task(title));
+		this.add(new Task(title,this));
 	}
 	public void add(String title,Date dueDate){
-		this.add(new Task(title,dueDate));
+		this.add(new Task(title,dueDate,this));
 	}
 	
 	
@@ -62,6 +62,10 @@ public class TaskList extends LinkedList<Task> {
 		}
 		return task;
 	}
+        
+        public void edit(int index,String title){
+            this.get(index).setTitle(title);
+        }
 	
 	/**
 	 * 排序函数,输入为Comparator类，按照其compare()方法进行排序

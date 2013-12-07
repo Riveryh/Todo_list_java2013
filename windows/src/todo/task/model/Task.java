@@ -18,6 +18,7 @@ public class Task implements Serializable{
 	private String __title;
 	private String __discription;
 	private boolean __isCompleted;
+        private TaskList __belongTo;
 	
 	
 	
@@ -31,16 +32,17 @@ public class Task implements Serializable{
 		this.__isCompleted	 = false;
 		this.__discription	 = null;
 	}
-	public Task(String title) {
+	public Task(String title,TaskList list) {
 		this();
+                this.__belongTo = list;
 		this.__title = title;
 	}
-	public Task( String title,Date dueDate) {
-		this(title);
+	public Task( String title,Date dueDate,TaskList list) {
+		this(title,list);
 		this.__dueDate = dueDate;
 	}
-	public Task(String title, Date dueDate, String discription) {
-		this(title,dueDate);
+	public Task(String title, Date dueDate, String discription,TaskList list) {
+		this(title,dueDate,list);
 		this.__discription = discription;
 	}
 	
@@ -91,5 +93,8 @@ public class Task implements Serializable{
 	public void setCompleted(boolean isCompleted) {
 		this.__isCompleted = isCompleted;
 	}
+        public TaskList getBelongTo(){
+                return __belongTo;
+        }
 	
 }
