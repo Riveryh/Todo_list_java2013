@@ -9,6 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import todo.task.model.Task;
 
 import todo.task.model.TaskList;
 
@@ -48,7 +49,7 @@ public class Todo {
 		Matcher matcher = exitPattern.matcher(buffer=sc.nextLine());
 		while(!exitPattern.matcher(buffer).find()){
 			if((matcher=addPattern.matcher(buffer)).find()){
-				_list.add(matcher.group());
+				_list.add(new Task(matcher.group(),_list));
 				if((matcher=timePattern.matcher(buffer)).find()){
 					Calendar today = Calendar.getInstance();
 					today.add(Calendar.DATE, Integer.parseInt(matcher.group()));
@@ -103,7 +104,7 @@ public class Todo {
             Matcher matcher;
             matcher = exitPattern.matcher(buffer=args);
             if((matcher=addPattern.matcher(buffer)).find()){
-                    _list.add(matcher.group());
+                    _list.add(new Task(matcher.group(),_list));
                     if((matcher=timePattern.matcher(buffer)).find()){
                             Calendar today = Calendar.getInstance();
                             today.add(Calendar.DATE, Integer.parseInt(matcher.group()));

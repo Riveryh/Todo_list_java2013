@@ -19,11 +19,12 @@ public class Task implements Serializable{
 	private String __discription;
 	private boolean __isCompleted;
         private TaskList __belongTo;
+        private int __order;
 	
 	
 	
 	//constructors
-	public Task(){
+	private Task(){
 		__serialNumber = __taskCounter;
 		__taskCounter+=1;
 		this.__establishedDate = new Date();
@@ -36,6 +37,7 @@ public class Task implements Serializable{
 		this();
                 this.__belongTo = list;
 		this.__title = title;
+                this.__order = list.size()+1;
 	}
 	public Task( String title,Date dueDate,TaskList list) {
 		this(title,list);
@@ -49,7 +51,8 @@ public class Task implements Serializable{
 	//ToString overWrite;
 	public String toString(){
 		SimpleDateFormat format = new SimpleDateFormat("E");
-		return __title + "\n\t\t\t" + format.format(__dueDate);
+		return __title + "\n\t\t\t" + format.format(__dueDate)
+                            + __order;
 	}
 	
 	
@@ -95,6 +98,12 @@ public class Task implements Serializable{
 	}
         public TaskList getBelongTo(){
                 return __belongTo;
+        }
+        public int getOrder(){
+                return __order;
+        }
+        public void setOrder(int order){
+                this.__order = order;
         }
 	
 }

@@ -43,8 +43,8 @@ public class TaskBox extends javax.swing.JPanel implements ListCellRenderer
     private TaskBox _thisBox = this;
     private DefaultCellEditor _dCE;
     
-    static int _WIDTH = 220;
-    static int _HEIGHT= 50;
+    static int _WIDTH = 280;
+    static int _HEIGHT= 45;
     
     /**
      * 含参数构造方法，接受一个Task对象，将它的引用保存在TaskBox对象内部，
@@ -69,6 +69,7 @@ public class TaskBox extends javax.swing.JPanel implements ListCellRenderer
         this.addMouseListener(new MouseAdapter(){
             public void mouseClicked(MouseEvent e){
                 _thisBox._task.setCompleted(_thisBox._checkBox.isSelected());
+                _thisBox._taskTitleField.selectAll();
                 _thisBox.refresh();
             }
         });
@@ -124,6 +125,17 @@ public class TaskBox extends javax.swing.JPanel implements ListCellRenderer
      */
     public Task getTask(){
         return this._task;
+    }
+    
+    /**
+     * 添加和获取order次序.
+     * @return 
+     */
+    public int getOrder(){
+        return this._task.getOrder();
+    }
+    public void setOrder(int order){
+        this._task.setOrder(order);
     }
     
     
@@ -256,23 +268,14 @@ public class TaskBox extends javax.swing.JPanel implements ListCellRenderer
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        _taskTitleField = new javax.swing.JTextField();
         _checkBox = new javax.swing.JCheckBox();
+        _taskTitleField = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setFont(new java.awt.Font("Microsoft YaHei UI", 0, 15)); // NOI18N
         setPreferredSize(new java.awt.Dimension(_WIDTH,_HEIGHT));
-
-        _taskTitleField.setBackground(getBackground());
-        _taskTitleField.setFont(new java.awt.Font("Microsoft YaHei", 0, 22)); // NOI18N
-        _taskTitleField.setText("jTextField2");
-        _taskTitleField.setBorder(null);
-        _taskTitleField.setPreferredSize(new Dimension(_WIDTH,_HEIGHT));
-        _taskTitleField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                _taskTitleFieldActionPerformed(evt);
-            }
-        });
+        setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
         _checkBox.setBackground(new java.awt.Color(255, 255, 255));
         _checkBox.setHideActionText(true);
@@ -280,28 +283,27 @@ public class TaskBox extends javax.swing.JPanel implements ListCellRenderer
         _checkBox.setMaximumSize(new java.awt.Dimension(40, 40));
         _checkBox.setMinimumSize(new java.awt.Dimension(40, 40));
         _checkBox.setPreferredSize(new java.awt.Dimension(40, 40));
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(_checkBox, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(5, 5, 5)
-                .addComponent(_taskTitleField, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(_checkBox, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addComponent(_taskTitleField, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-        );
-
+        add(_checkBox);
         _checkBox.addItemListener(new java.awt.event.ItemListener(){
             public void itemStateChanged(java.awt.event.ItemEvent e){
                 // _thisBox.getTask().setCompleted((boolean)e.getStateChange());
             }
         });
+
+        _taskTitleField.setBackground(getBackground());
+        _taskTitleField.setFont(new java.awt.Font("STSong", 0, 22)); // NOI18N
+        _taskTitleField.setText("jTextField2");
+        _taskTitleField.setBorder(null);
+        _taskTitleField.setPreferredSize(new java.awt.Dimension(170, 30));
+        _taskTitleField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                _taskTitleFieldActionPerformed(evt);
+            }
+        });
+        add(_taskTitleField);
+
+        jLabel1.setText(". . .");
+        add(jLabel1);
     }// </editor-fold>//GEN-END:initComponents
 
     private void _taskTitleFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__taskTitleFieldActionPerformed
@@ -311,6 +313,7 @@ public class TaskBox extends javax.swing.JPanel implements ListCellRenderer
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox _checkBox;
     private javax.swing.JTextField _taskTitleField;
+    private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 
 

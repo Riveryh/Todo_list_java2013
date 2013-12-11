@@ -5,31 +5,53 @@
  */
 package todo.gui;
 
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import todo.task.model.Task;
 
 /**
  *
  * @author huangyuhan
  */
-public class AddTaskBox extends javax.swing.JPanel {
+public class AddTaskBox extends TaskBox {
+    private AddTaskBox _thisBox = this;
+    
 
     /**
      * Creates new form AddTaskBox
      */
     public AddTaskBox() {
         initComponents();
+        this.taskBox1.getTextField().setText("New Task");
+        this.taskBox1.getTextField().addFocusListener(new FocusAdapter(){
+            public void focusLost(FocusEvent e){
+                _thisBox.doAdd();
+            }
+        });
+    }
+    
+    public int getOrder(){
+        return 0;
     }
     
     public void doAdd(){
         TaskListPanel _listPanel = (TaskListPanel) this.getParent();
-        _listPanel.add(generateTask());
-        _listPanel.remove(this);
+        if(this.getTitle().equalsIgnoreCase("")){
+            
+        }else{
+            _listPanel.add(generateTask());
+            _listPanel.remove(this);
+        }
     }
     
     public Task generateTask(){
         Task _task;
         _task = new Task(this.taskBox1.getTextField().getText(),((TaskListPanel) this.getParent()).getTaskList());
         return _task;
+    }
+    
+    public String getTitle(){
+        return this.taskBox1.getTextField().getText();
     }
 
     /**
@@ -41,31 +63,14 @@ public class AddTaskBox extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
         taskBox1 = new todo.gui.TaskBox();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/todo/gui/addIcon.png"))); // NOI18N
-        jButton1.setToolTipText("");
-        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jButton1.setDefaultCapable(false);
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-        add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 10, 30, 30));
         add(taskBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 230, -1));
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        this.doAdd();
-    }//GEN-LAST:event_jButton1ActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     private todo.gui.TaskBox taskBox1;
     // End of variables declaration//GEN-END:variables
 }
