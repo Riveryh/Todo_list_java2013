@@ -7,12 +7,18 @@ package todo.gui;
 
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.LayoutManager;
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import static java.lang.Math.max;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BoxLayout;
@@ -23,11 +29,19 @@ import todo.task.model.TaskList;
  *
  * @author huangyuhan
  */
-public class TaskListPanel extends javax.swing.JPanel {
+public class TaskListPanel extends javax.swing.JPanel implements 
+            todo.task.util.TaskListListener{
     
     private TaskList _list;
     private int _taskBoxCount=0;
-    private int _vgap=1;    //表示两个taskBox之间的间距；
+    private int _vgap=3;    //表示两个taskBox之间的间距；
+    private int _zOrder;
+    private LayoutManager layout;
+    private HashMap<Integer,ListBox> _mapOrderToBox;
+    private LinkedList<Component> _boxes;
+    
+    private DragBoxListener dragListener = new DragBoxListener();
+  
     
     
     static int _WIDTH = TaskBox._WIDTH;
@@ -39,20 +53,25 @@ public class TaskListPanel extends javax.swing.JPanel {
      */
     public TaskListPanel() {
         initComponents();
+        _boxes = new LinkedList<Component>();
     }
     public TaskListPanel(TaskList list){
         this();
         this._list=list;
+        Task __task;
+        ListBox __box;
         Iterator<Task> _iterator = _list.iterator();
         while(_iterator.hasNext()){
-            this.add(new TaskBox(_iterator.next()));
+            __box = (ListBox) this.add(__task=_iterator.next());
         }
-        
+        _list.addTaskListListener(this);
     }
 
     /**
      * TaskListPanel的add方法：
-     * 用来添加TaskBox或者AddTaskBox组件.
+     * 用来添加TaskBox或者AddTaskBox组件
+     * 此方法不应该被外部直接调用！
+     * 此方法只是改变了显示内容，并不会对数据产生任何改变!.
      * 
      * @param comp
      * @return 
@@ -60,65 +79,88 @@ public class TaskListPanel extends javax.swing.JPanel {
      */
     @Override
     public Component add(Component comp) {
-        DragBoxListener dragListener = new DragBoxListener();
-        System.out.println("add detected!");
+        //System.out.println("add detected!");
         _taskBoxCount++;
-        //this.setLayout(new GridLayout(max(_taskBoxCount,8),0,0,_vgap));
-        this.setLayout(null);
-        //this.add(new javax.swing.JButton());
-        this.setSize(new java.awt.Dimension(_WIDTH,(_HEIGHT+80)*_taskBoxCount+_vgap*_taskBoxCount));
+        //this.setSize(new java.awt.Dimension(_WIDTH,(_HEIGHT)*_taskBoxCount+_vgap*_taskBoxCount+100));
         Component _comp = super.add(comp); //To change body of generated methods, choose Tools | Templates.
-        //comp.setLocation(100,100);
+        
+        //this.updateUI();
+        return _comp;
+    } 
+    
+    /**
+     * 以task为参数的添加方法
+     * 此方法会改变Panel内部的_boxes list；
+     * @param task 
+     */
+    public Component add(Task task){
+        Component comp;
+        comp = this.add(new TaskBox(task,this));
+        _boxes.add(((ListBox)comp).getOrder(),comp);    //将模块添加到内部的数组中,并且顺序就是task的顺序，这样就保持了一致性.
         /**
          * 注册motionListener用来检测drag事件，
          * 注册mouseListener用来检测click事件，以记录初始坐标和释放坐标.
          */
         comp.addMouseMotionListener(dragListener);//添加鼠标拖动监听器.
         comp.addMouseListener(dragListener);
-        this.updateUI();
-        return _comp;
+        super.updateUI();
+        return comp;
     }
-
-
-    @Override
-    public void updateUI() {
-        java.awt.Point p;
-        /**
-         * 先按照order顺序对TaskBox进行排序.
-         */
-        for(int i=0 ; i<_taskBoxCount; i++){
-            Component comp = this.getComponent(i);
-             //设置每个组件的大小和位置;
-            comp.setBounds(0,(((TaskBox)comp).getOrder()-1)*(_HEIGHT+3*_vgap)
-                               ,_WIDTH,_HEIGHT);
-        }
-        super.updateUI(); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-    /**
-     * 以task为参数的添加方法.
-     * @param task 
-     */
-    public void add(Task task){
-        this._list.addLast(task);
-        this.add(new TaskBox(task));
-        try {
-            this._list.save();
-        } catch (IOException ex) {
-            Logger.getLogger(TaskListPanel.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    
     /**
      * 无参数添加方法，调出AddTaskBox.
      */
     public void addTask(){
-        java.awt.GridLayout layout;
-        layout = new java.awt.GridLayout(_taskBoxCount+1, 1, 0, _vgap);
-        this.setLayout(layout);
-        layout.addLayoutComponent("AddBox",new AddTaskBox());
+        /*
+        AddTaskBox addBox = new AddTaskBox(this);       
+        */
+        this.add(getNewTask());
     }
+    
+    
+    public Point getTaskBoxLocation(TaskBox box){       
+        return new Point(0,(box.getOrder()-1)*(_HEIGHT+_vgap));
+    }
+    
+    public Task getNewTask(){
+        return _list.getNewTask();
+    }
+    
+
+    @Override
+    public void remove(Component comp) {
+        comp.removeMouseListener(dragListener);
+        comp.removeMouseMotionListener(dragListener);
+        super.remove(comp); 
+    }
+    
+
+    @Override
+    public void updateUI() {
+        /**
+         * 先按照order顺序对TaskBox进行排序.
+         * TODO:add操作在box很多的时候非常耗时间，需要优化.
+         */
+        Component temp;
+        Component temp2;
+        this.removeAll();//移除所有boxes的显示.
+        
+        this._taskBoxCount = 0;
+        if(_boxes!=null){
+            Iterator<Component> iterator = _boxes.iterator();
+            while(iterator.hasNext()){
+                temp = iterator.next();
+                /**
+                 * TODO: 此处添加判断:是否为同一天的task，不是则加入一条分割线.
+                 */
+                this.add(temp);
+            }
+        }
+        super.updateUI(); 
+    }
+    
+    
+    
+    
     
     /**
      * 获得此TaskListPanel所对应的TaskList.
@@ -128,15 +170,16 @@ public class TaskListPanel extends javax.swing.JPanel {
         return _list;
     }
     
+    public int getTaskBoxCount(){
+        return _taskBoxCount;
+    }
+    
     /**
      * task内容发生改变之后调用此方法进行保存.
      */
-    public void onTaskChanged(){
-        try {
-            _list.save();
-        } catch (IOException ex) {
-            Logger.getLogger(TaskListPanel.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    @Override
+    public void onTaskListChanged(){
+        this.updateUI();
     }
     
     /**
@@ -147,6 +190,11 @@ public class TaskListPanel extends javax.swing.JPanel {
      * @author huangyuhan
      */
     public void onDragged(MouseEvent e){
+        _zOrder = getComponentZOrder(e.getComponent());
+        //仅当拖拽开始时才设置层次，以减少资源损耗.
+        if(_zOrder!=0){
+            this.setComponentZOrder(e.getComponent(), 0);
+        }
     }
     /**
      * 此方法被DragBoxListener调用，当拖拽结束时调用,
@@ -156,7 +204,25 @@ public class TaskListPanel extends javax.swing.JPanel {
      * @author huangyuhan
      */
     public void onDragRelesed(MouseEvent e){
+        this.setComponentZOrder(e.getComponent(),_zOrder);
+        _zOrder = 0;
+    }
+    
+    
+    /**
+     * 此方法对此ListPanel中的任务的优先级进行更改.
+     * @param oldOrder
+     * @param newOrder 
+     */
+    public void changeOrder(int oldOrder, int newOrder){
+        ListBox __box;
         
+        _boxes.add(newOrder,_boxes.remove(oldOrder));
+        this._list.changeOrder(oldOrder, newOrder);
+        
+        System.out.println(new Date().getTime());
+        this.updateUI();       
+        System.out.println(new Date().getTime());
     }
     
     public int getIndexAtLocation(java.awt.Point point){
@@ -165,18 +231,13 @@ public class TaskListPanel extends javax.swing.JPanel {
         return index;
     }
     
-    /**
-     * 此方法对此ListPanel中的任务的优先级进行更改.
-     * @param oldOrder
-     * @param newOrder 
-     */
-    public void changeOrder(int oldOrder, int newOrder){
-        this._list.changeOrder(oldOrder, newOrder);
-        this.updateUI();
+    public TaskList getList(){
+        return this._list;
     }
     
+    
     public java.awt.Dimension getPreferredSize(){
-        return new java.awt.Dimension(_WIDTH,_HEIGHT*_taskBoxCount+_vgap*_taskBoxCount);
+        return new java.awt.Dimension(_WIDTH,80+_HEIGHT*_taskBoxCount+_vgap*_taskBoxCount);
     }
 
     /**
@@ -189,9 +250,18 @@ public class TaskListPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         setMaximumSize(new java.awt.Dimension(_WIDTH,_HEIGHT*_taskBoxCount+_vgap*_taskBoxCount));
-        setLayout(null);
+        setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, _vgap));
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
+
+    void delet(ListBox __box) {
+        System.out.println("remove"+_boxes.remove(__box));//先从内部的模块list中删除.
+        System.out.println(_boxes);
+        _list.remove(__box.getOrder());//再从_list数据列表中删除.
+        this.updateUI();
+    }
+
+    
 }

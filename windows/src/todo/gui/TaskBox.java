@@ -6,45 +6,37 @@
 package todo.gui;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.io.IOException;
-import java.util.EventObject;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultCellEditor;
-import javax.swing.JList;
-import javax.swing.JTable;
-import javax.swing.ListCellRenderer;
-import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.table.TableCellEditor;
-import javax.swing.table.TableCellRenderer;
 import todo.task.model.Task;
 
 /**
  *
  * @author huangyuhan
  */
-public class TaskBox extends javax.swing.JPanel implements ListCellRenderer
-                                                            ,TableCellRenderer
-                                                            ,TableCellEditor{
+public class TaskBox extends javax.swing.JPanel  implements ListBox{
     private Task _task;
     private TaskBox _thisBox = this;
     private DefaultCellEditor _dCE;
+    private TaskListPanel _parent;
+    private boolean _isExtended=false;
     
     static int _WIDTH = 280;
     static int _HEIGHT= 45;
+    static int _EXTENDED_HEIGHT = 100;
     
     /**
      * 含参数构造方法，接受一个Task对象，将它的引用保存在TaskBox对象内部，
@@ -55,19 +47,31 @@ public class TaskBox extends javax.swing.JPanel implements ListCellRenderer
      public TaskBox(){
         super();
         initComponents();
-    }
-    public TaskBox(Task task){
+     }
+     /**
+      * 此类型的构造方法在创建addTaskBox时候会被调用.
+      * @param parent 
+      */
+     public TaskBox(TaskListPanel parent){
+         this(parent.getNewTask(),parent);
+     }
+     /**
+      * 此种类型的构造方法在panel初始化的时候被调用.
+      * @param task
+      * @param parent 
+      */
+     public TaskBox(Task task,TaskListPanel parent){
         this();
         _task = task;
+        _parent = parent;
         this.refresh();
-        _dCE = new DefaultCellEditor(new javax.swing.JTextField());
-        
-        
+        _dCE = new DefaultCellEditor(new javax.swing.JTextField());        
         /**
          * 添加事件监听器.
          */
         this.addMouseListener(new MouseAdapter(){
             public void mouseClicked(MouseEvent e){
+                System.out.println("mouseClicked");
                 _thisBox._task.setCompleted(_thisBox._checkBox.isSelected());
                 _thisBox._taskTitleField.selectAll();
                 _thisBox.refresh();
@@ -87,10 +91,6 @@ public class TaskBox extends javax.swing.JPanel implements ListCellRenderer
             @Override
             public void focusLost(FocusEvent e) {
                 _thisBox._task.setTitle(_thisBox._taskTitleField.getText());
-                /**
-                 * 此处将update消息传递给上层容器，由listPanel执行save()等操作.
-                 */
-                ((TaskListPanel)_thisBox.getParent()).onTaskChanged();
             }
         });
         
@@ -101,9 +101,14 @@ public class TaskBox extends javax.swing.JPanel implements ListCellRenderer
             @Override
             public void stateChanged(ChangeEvent e) {
                 _thisBox._task.setCompleted(_thisBox._checkBox.isSelected());
-                ((TaskListPanel)_thisBox.getParent()).onTaskChanged();
             }           
         });
+        
+        /**
+         * 初始化扩展面板内容，保持与task数据的一致.
+         */
+        this.setInputDate(_thisBox._task.getDueDate());
+        this.setInputDiscription(_thisBox._task.getDiscription());
     }
     
     
@@ -113,20 +118,17 @@ public class TaskBox extends javax.swing.JPanel implements ListCellRenderer
      */
     public javax.swing.JTextField getTextField(){
         return this._taskTitleField;
-    }
-    
+    }   
     public javax.swing.JCheckBox getCheckBox(){
         return this._checkBox;
     }
-
     /**
      * 返回此TaskBox对象所对应的Task对象.
      * @return 
      */
     public Task getTask(){
         return this._task;
-    }
-    
+    } 
     /**
      * 添加和获取order次序.
      * @return 
@@ -137,125 +139,24 @@ public class TaskBox extends javax.swing.JPanel implements ListCellRenderer
     public void setOrder(int order){
         this._task.setOrder(order);
     }
-    
-    
-     
-    
-    private void refresh(){      
-        _checkBox.setSelected(_task.isCompleted());
-        _taskTitleField.setText(_task.getTitle());
-    }
-    
-    
-    
-    @Override
-    /**
-     * (已废弃）
-     * 实现此方法是为了实现javax.swing.TableCellRenderer接口,
-     * 此方法会被myTaskTable调用，其返回值是用于放在cell中显示的Component对象,
-     * 其接受的参数中的value字段，是对应的MyTableModel中的TaskBox对象.
-     * 
-     * @author: huangyuhan
-     */
-    public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-        //this._taskTitleField.
-        TaskBox _taskBox = (TaskBox)value;
-        if (isSelected) {
-             _taskBox.setBackground(list.getSelectionBackground());
-             _taskBox.setForeground(list.getSelectionForeground());
-             _taskBox.getTextField();
+  
+    private void refresh(){
+        if(_task!=null){
+            _checkBox.setSelected(_task.isCompleted());
+            _taskTitleField.setText(_task.getTitle());
         }
-        else {
-             _taskBox.setBackground(list.getBackground());
-             _taskBox.setForeground(list.getForeground());
-        }
-        _taskBox.setEnabled(list.isEnabled());
-        _taskBox.setFont(list.getFont());
-        _taskBox.setOpaque(true);
-        return _taskBox;
     }
-    /**
-     * (已废弃）
-     * 实现此方法是为了实现javax.swing.TableCellEditor接口,
-     * 此方法会被myTaskTable调用，其返回值是用产生可放置在表格中编辑的对象;
-     * 其接受的参数中的value字段，是对应的MyTableModel中的TaskBox对象.
-     * 
-     * @author: huangyuhan
-     */
-    public Component getTableCellRendererComponent(JTable table,
-                                        Object value,
-                                        boolean isSelected,
-                                        boolean hasFocus,
-                                        int row,
-                                        int column) {
-        //this._taskTitleField.
-        TaskBox _taskBox = (TaskBox)value;
-        if (isSelected) {
-             _taskBox.setBackground(table.getSelectionBackground());
-             _taskBox.setForeground(table.getSelectionForeground());
-             _taskBox.getTextField();
-        }
-        else {
-             _taskBox.setBackground(table.getBackground());
-             _taskBox.setForeground(table.getForeground());
-        }
-        _taskBox.setEnabled(table.isEnabled());
-        _taskBox.setFont(table.getFont());
-        _taskBox.setOpaque(true);
-        return _taskBox;
-    }
-    
+   
     @Override
-    public Component getTableCellEditorComponent(JTable table,
-                                      Object value,
-                                      boolean isSelected,
-                                      int row,
-                                      int column){
-        _thisBox=(TaskBox)value;
-        return _thisBox;
+    public void setBackground(Color bg) {
+        super.setBackground(bg); //To change body of generated methods, choose Tools | Templates.
+        if((_checkBox!=null)&&(_taskTitleField!=null)){
+            this._checkBox.setBackground(bg);
+            this._taskTitleField.setBackground(bg);
+            this.basicPanel.setBackground(bg);
+            this.extendedPanel.setBackground(bg);
+        }        
     }
-    
-    
-    @Override
-    public Object getCellEditorValue() {
-        return _thisBox;
-    }
-
-    @Override
-    public boolean isCellEditable(EventObject anEvent) {
-        //return _dCE.isCellEditable(anEvent);
-        return true;
-    }
-
-    @Override
-    public boolean shouldSelectCell(EventObject anEvent) {
-        ///return _dCE.shouldSelectCell(anEvent);
-        return false;
-    }
-
-    @Override
-    public boolean stopCellEditing() {
-       // return _dCE.stopCellEditing();
-        String buffer = _thisBox.getTextField().getText();
-        _thisBox.getTask().setTitle(buffer);
-        return true;
-    }
-
-    @Override
-    public void cancelCellEditing() {
-        
-    }
-
-    @Override
-    public void addCellEditorListener(CellEditorListener l) {
-        //_thisBox._taskTitleField.addActionListener((ActionListener)l);
-    }
-
-    @Override
-    public void removeCellEditorListener(CellEditorListener l) {
-       //thisBox._taskTitleField.removeActionListener((ActionListener)l);
-    }
-            
             
             
            
@@ -268,14 +169,30 @@ public class TaskBox extends javax.swing.JPanel implements ListCellRenderer
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        basicPanel = new javax.swing.JPanel();
         _checkBox = new javax.swing.JCheckBox();
         _taskTitleField = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
+        dragLabel = new javax.swing.JLabel();
+        extendedPanel = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        yearComboBox = new javax.swing.JComboBox();
+        jLabel3 = new javax.swing.JLabel();
+        monthComboBox = new javax.swing.JComboBox();
+        jLabel4 = new javax.swing.JLabel();
+        dateComboBox = new javax.swing.JComboBox();
+        jLabel5 = new javax.swing.JLabel();
+        discriptionTextField = new javax.swing.JTextField();
+        submitButton = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setFont(new java.awt.Font("Microsoft YaHei UI", 0, 15)); // NOI18N
-        setPreferredSize(new java.awt.Dimension(_WIDTH,_HEIGHT));
-        setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
+        setMaximumSize(new java.awt.Dimension(280, 500));
+        setPreferredSize(new Dimension(_WIDTH,_HEIGHT));
+        setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
+
+        basicPanel.setBackground(new java.awt.Color(255, 255, 255));
+        basicPanel.setPreferredSize(new Dimension(_WIDTH,_HEIGHT));
+        basicPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
 
         _checkBox.setBackground(new java.awt.Color(255, 255, 255));
         _checkBox.setHideActionText(true);
@@ -283,7 +200,12 @@ public class TaskBox extends javax.swing.JPanel implements ListCellRenderer
         _checkBox.setMaximumSize(new java.awt.Dimension(40, 40));
         _checkBox.setMinimumSize(new java.awt.Dimension(40, 40));
         _checkBox.setPreferredSize(new java.awt.Dimension(40, 40));
-        add(_checkBox);
+        _checkBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                _checkBoxActionPerformed(evt);
+            }
+        });
+        basicPanel.add(_checkBox);
         _checkBox.addItemListener(new java.awt.event.ItemListener(){
             public void itemStateChanged(java.awt.event.ItemEvent e){
                 // _thisBox.getTask().setCompleted((boolean)e.getStateChange());
@@ -295,26 +217,149 @@ public class TaskBox extends javax.swing.JPanel implements ListCellRenderer
         _taskTitleField.setText("jTextField2");
         _taskTitleField.setBorder(null);
         _taskTitleField.setPreferredSize(new java.awt.Dimension(170, 30));
-        _taskTitleField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                _taskTitleFieldActionPerformed(evt);
+        _taskTitleField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                _taskTitleFieldFocusGained(evt);
             }
         });
-        add(_taskTitleField);
+        basicPanel.add(_taskTitleField);
 
-        jLabel1.setText(". . .");
-        add(jLabel1);
+        dragLabel.setText(". . .");
+        basicPanel.add(dragLabel);
+
+        add(basicPanel);
+
+        extendedPanel.setFont(new java.awt.Font("STXihei", 0, 15)); // NOI18N
+        extendedPanel.setPreferredSize(new Dimension(_WIDTH,_EXTENDED_HEIGHT));
+        extendedPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 20));
+
+        jLabel2.setText("年：");
+        extendedPanel.add(jLabel2);
+
+        yearComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "2013", "2014", "2015", "2016", "2017" }));
+        yearComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                yearComboBoxActionPerformed(evt);
+            }
+        });
+        extendedPanel.add(yearComboBox);
+
+        jLabel3.setText("月：");
+        extendedPanel.add(jLabel3);
+
+        monthComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12" }));
+        extendedPanel.add(monthComboBox);
+
+        jLabel4.setText("日：");
+        extendedPanel.add(jLabel4);
+
+        dateComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" }));
+        extendedPanel.add(dateComboBox);
+
+        jLabel5.setText("备注：");
+        extendedPanel.add(jLabel5);
+
+        discriptionTextField.setText("添加备注");
+        discriptionTextField.setPreferredSize(new java.awt.Dimension(150, 30));
+        extendedPanel.add(discriptionTextField);
+
+        submitButton.setText("do");
+        submitButton.setActionCommand("Y");
+        submitButton.setPreferredSize(new java.awt.Dimension(64, 30));
+        submitButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                submitButtonMouseClicked(evt);
+            }
+        });
+        extendedPanel.add(submitButton);
+
+        add(extendedPanel);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void _taskTitleFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__taskTitleFieldActionPerformed
+    private void yearComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_yearComboBoxActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event__taskTitleFieldActionPerformed
+    }//GEN-LAST:event_yearComboBoxActionPerformed
+
+    private void _checkBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__checkBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event__checkBoxActionPerformed
+
+    private void _taskTitleFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event__taskTitleFieldFocusGained
+        this.doAdd();
+    }//GEN-LAST:event__taskTitleFieldFocusGained
+
+    private void submitButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_submitButtonMouseClicked
+        this.doSubmit();
+    }//GEN-LAST:event_submitButtonMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox _checkBox;
     private javax.swing.JTextField _taskTitleField;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel basicPanel;
+    private javax.swing.JComboBox dateComboBox;
+    private javax.swing.JTextField discriptionTextField;
+    private javax.swing.JLabel dragLabel;
+    private javax.swing.JPanel extendedPanel;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JComboBox monthComboBox;
+    private javax.swing.JButton submitButton;
+    private javax.swing.JComboBox yearComboBox;
     // End of variables declaration//GEN-END:variables
 
+    private void doAdd() {
+        this._isExtended = true;
+        //放下扩展面板
+        this.setPreferredSize(new java.awt.Dimension(_WIDTH,_HEIGHT+_EXTENDED_HEIGHT));
+        this.updateUI();
+    }
+
+    private void doSubmit() {
+        this._task.setDueDate(getInputDate());
+        this._task.setDiscription(getInputDiscription());
+                
+        //收起扩展面板.        
+        this.setPreferredSize(new java.awt.Dimension(_WIDTH,_HEIGHT));
+        this.updateUI();
+        this._isExtended = false;
+    }
+    /**
+     * 此函数获得用户通过GUI输入的时间，翻译为Date对象.
+     * 注意：不检查时间范围的合理性！
+     * @return 
+     */
+    public Date getInputDate(){
+        System.out.println("this function is uncompleted!");
+        Date date = new Date();
+        String buffer = new String();
+        buffer += this.yearComboBox.getSelectedItem();
+        buffer += "-"+this.monthComboBox.getSelectedItem();
+        buffer += "-"+this.dateComboBox.getSelectedItem();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            date = format.parse(buffer);
+        } catch (ParseException ex) {
+            Logger.getLogger(TaskBox.class.getName()).log(Level.SEVERE, null, ex);
+             System.out.println("Error!");
+        }
+        return date;
+    }
+    /**
+     * 此函数通过GUI获取用户输入的备注信息.
+     * @return 
+     */
+    public String getInputDiscription(){
+        return this.discriptionTextField.getText();
+    }
+    public void setInputDate(Date date){
+        yearComboBox.setSelectedItem( ((Integer)date.getYear()).toString());
+        monthComboBox.setSelectedItem(((Integer)date.getMonth()).toString());
+        dateComboBox.setSelectedItem(((Integer)date.getDate()).toString());
+    }
+    public void setInputDiscription(String discription){
+        this.discriptionTextField.setText(discription);
+    }
 
 }

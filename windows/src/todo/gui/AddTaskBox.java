@@ -13,14 +13,18 @@ import todo.task.model.Task;
  *
  * @author huangyuhan
  */
-public class AddTaskBox extends TaskBox {
+public class AddTaskBox extends TaskBox{
     private AddTaskBox _thisBox = this;
+    private TaskListPanel _parent ;
     
 
     /**
      * Creates new form AddTaskBox
      */
     public AddTaskBox() {
+    }
+    public AddTaskBox(TaskListPanel parent){
+        this._parent = parent;
         initComponents();
         this.taskBox1.getTextField().setText("New Task");
         this.taskBox1.getTextField().addFocusListener(new FocusAdapter(){
@@ -28,10 +32,12 @@ public class AddTaskBox extends TaskBox {
                 _thisBox.doAdd();
             }
         });
+        this.taskBox1.setOrder(parent.getTaskBoxCount()+1);
     }
     
+  
     public int getOrder(){
-        return 0;
+        return this.taskBox1.getOrder();
     }
     
     public void doAdd(){
@@ -41,8 +47,11 @@ public class AddTaskBox extends TaskBox {
         }else{
             _listPanel.add(generateTask());
             _listPanel.remove(this);
+            _listPanel.getList().remove(this.taskBox1.getTask());
         }
     }
+    
+    
     
     public Task generateTask(){
         Task _task;
@@ -63,9 +72,8 @@ public class AddTaskBox extends TaskBox {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        taskBox1 = new todo.gui.TaskBox();
+        taskBox1 = new todo.gui.TaskBox(_parent);
 
-        setBackground(new java.awt.Color(255, 255, 255));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
         add(taskBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 230, -1));
     }// </editor-fold>//GEN-END:initComponents

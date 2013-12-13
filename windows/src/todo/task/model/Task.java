@@ -18,7 +18,7 @@ public class Task implements Serializable{
 	private String __title;
 	private String __discription;
 	private boolean __isCompleted;
-        private TaskList __belongTo;
+        private TaskList __parent;
         private int __order;
 	
 	
@@ -35,7 +35,7 @@ public class Task implements Serializable{
 	}
 	public Task(String title,TaskList list) {
 		this();
-                this.__belongTo = list;
+                this.__parent = list;
 		this.__title = title;
                 this.__order = list.size()+1;
 	}
@@ -64,45 +64,52 @@ public class Task implements Serializable{
 		return __startDate;
 	}
 	public void setStartDate(Date startDate) {
+                __parent.onTaskChanged(this);
 		this.__startDate = startDate;
 	}
 	public Date getDueDate() {
 		return __dueDate;
 	}
 	public void setDueDate(Date dueDate) {
+                __parent.onTaskChanged(this);
 		this.__dueDate = dueDate;
 	}
 	public Date getEstablishedDate() {
 		return __establishedDate;
 	}
 	public void setEstablishedDate(Date establishedDate) {
+                __parent.onTaskChanged(this);
 		this.__establishedDate = establishedDate;
 	}
 	public String getTitle() {
 		return __title;
 	}
 	public void setTitle(String title) {
+                __parent.onTaskChanged(this);
 		this.__title = title;
 	}
 	public String getDiscription() {
 		return __discription;
 	}
 	public void setDiscription(String discription) {
+                __parent.onTaskChanged(this);
 		this.__discription = discription;
 	}
 	public boolean isCompleted() {
 		return __isCompleted;
 	}
 	public void setCompleted(boolean isCompleted) {
+                __parent.onTaskChanged(this);
 		this.__isCompleted = isCompleted;
 	}
         public TaskList getBelongTo(){
-                return __belongTo;
+                return __parent;
         }
         public int getOrder(){
                 return __order;
         }
         public void setOrder(int order){
+                //__parent.onTaskChanged(this);
                 this.__order = order;
         }
 	

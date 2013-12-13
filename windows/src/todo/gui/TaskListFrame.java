@@ -39,26 +39,6 @@ public class TaskListFrame extends javax.swing.JFrame {
         this.add(new JTextField());
         Iterator<Task> _iterator = _list.iterator();      
         initComponents();
-        while(_iterator.hasNext()){
-            this.myTableModel.add(_iterator.next());
-        }
-        /*
-        myTaskTable.addMouseListener(new MouseAdapter(){
-            public void mouseClicked(MouseEvent e) {
-                int index = myTaskTable.locationToIndex(e.getPoint());
-                TaskBox thisBox = ((TaskBox)myTaskTable.getModel().getElementAt(index));
-                thisBox.getCheckBox().setSelected(!thisBox.getCheckBox().isSelected());
-                myTaskTable.updateUI();
-            }
-            public void mouseMoved(MouseEvent e){
-                int index = myTaskList.locationToIndex(e.getPoint());
-                myTaskList.setSelectedIndex(index);
-            }
-        });*/
-        
-        
-        
-        
     }
     
 
@@ -71,23 +51,17 @@ public class TaskListFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        myTaskTable = new todo.gui.MyTaskTable();
         commandText = new javax.swing.JTextField();
         submitButton = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         taskListPanel2 = new todo.gui.TaskListPanel(this._list);
 
-        myTaskTable.setDefaultRenderer(myTaskTable.getColumnClass(0), new TaskBox());
-        myTaskTable.setDefaultEditor(myTaskTable.getColumnClass(0), new TaskBox());
-        myTableModel = myTaskTable.getTableModel();
-        jScrollPane1.setViewportView(myTaskTable);
-
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setAlwaysOnTop(true);
         setBackground(new java.awt.Color(255, 255, 255));
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        setResizable(false);
 
         commandText.setText("Input Commands");
         commandText.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -130,26 +104,27 @@ public class TaskListFrame extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(0, 240, Short.MAX_VALUE)
-                .addComponent(jButton1))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(commandText)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(submitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButton1)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(commandText, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addComponent(submitButton))))
+                .addGap(0, 5, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 441, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
                 .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 468, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(commandText, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(submitButton)))
+                    .addComponent(submitButton)
+                    .addComponent(commandText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
         pack();
@@ -179,7 +154,7 @@ public class TaskListFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
-        this.taskListPanel2.add(new AddTaskBox());
+        this.taskListPanel2.addTask();
     }//GEN-LAST:event_jButton1MouseClicked
 
     /**
@@ -222,10 +197,7 @@ public class TaskListFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField commandText;
     private javax.swing.JButton jButton1;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private todo.gui.MyTableModel myTableModel;
-    private todo.gui.MyTaskTable myTaskTable;
     private javax.swing.JButton submitButton;
     private todo.gui.TaskListPanel taskListPanel2;
     // End of variables declaration//GEN-END:variables

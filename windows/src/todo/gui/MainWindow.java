@@ -26,10 +26,9 @@ public class MainWindow{
 			list = TaskList.open(new File(fileName));
 		}
             
-            
                 JFrame.setDefaultLookAndFeelDecorated(true);
 		JFrame frame=new TaskListFrame(list);
-                
+                //frame.setUndecorated(true);
 		frame.setVisible(true);
                 frame.setTitle("TODO");
 		frame.pack();
