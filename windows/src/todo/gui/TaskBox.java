@@ -107,7 +107,7 @@ public class TaskBox extends javax.swing.JPanel  implements ListBox{
         /**
          * 初始化扩展面板内容，保持与task数据的一致.
          */
-        this.setInputDate(_thisBox._task.getDueDate());
+        this.setInputDueDate(_thisBox._task.getDueDate());
         this.setInputDiscription(_thisBox._task.getDiscription());
     }
     
@@ -192,10 +192,11 @@ public class TaskBox extends javax.swing.JPanel  implements ListBox{
 
         basicPanel.setBackground(new java.awt.Color(255, 255, 255));
         basicPanel.setPreferredSize(new Dimension(_WIDTH,_HEIGHT));
-        basicPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
+        basicPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 2));
 
         _checkBox.setBackground(new java.awt.Color(255, 255, 255));
         _checkBox.setHideActionText(true);
+        _checkBox.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         _checkBox.setMargin(new java.awt.Insets(4, 4, 4, 4));
         _checkBox.setMaximumSize(new java.awt.Dimension(40, 40));
         _checkBox.setMinimumSize(new java.awt.Dimension(40, 40));
@@ -213,13 +214,16 @@ public class TaskBox extends javax.swing.JPanel  implements ListBox{
         });
 
         _taskTitleField.setBackground(getBackground());
-        _taskTitleField.setFont(new java.awt.Font("STSong", 0, 22)); // NOI18N
+        _taskTitleField.setFont(new java.awt.Font("Microsoft YaHei UI Light", 0, 22)); // NOI18N
         _taskTitleField.setText("jTextField2");
         _taskTitleField.setBorder(null);
         _taskTitleField.setPreferredSize(new java.awt.Dimension(170, 30));
         _taskTitleField.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 _taskTitleFieldFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                _taskTitleFieldFocusLost(evt);
             }
         });
         basicPanel.add(_taskTitleField);
@@ -292,6 +296,10 @@ public class TaskBox extends javax.swing.JPanel  implements ListBox{
         this.doSubmit();
     }//GEN-LAST:event_submitButtonMouseClicked
 
+    private void _taskTitleFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event__taskTitleFieldFocusLost
+        this._task.setTitle(this.getInputTitle());
+    }//GEN-LAST:event__taskTitleFieldFocusLost
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox _checkBox;
     private javax.swing.JTextField _taskTitleField;
@@ -317,12 +325,13 @@ public class TaskBox extends javax.swing.JPanel  implements ListBox{
     }
 
     private void doSubmit() {
-        this._task.setDueDate(getInputDate());
+        this._task.setDueDate(getInputDueDate());
         this._task.setDiscription(getInputDiscription());
                 
         //收起扩展面板.        
         this.setPreferredSize(new java.awt.Dimension(_WIDTH,_HEIGHT));
         this.updateUI();
+        ((TaskListPanel)this.getParent()).updateUI();
         this._isExtended = false;
     }
     /**
@@ -330,7 +339,7 @@ public class TaskBox extends javax.swing.JPanel  implements ListBox{
      * 注意：不检查时间范围的合理性！
      * @return 
      */
-    public Date getInputDate(){
+    public Date getInputDueDate(){
         System.out.println("this function is uncompleted!");
         Date date = new Date();
         String buffer = new String();
@@ -353,13 +362,30 @@ public class TaskBox extends javax.swing.JPanel  implements ListBox{
     public String getInputDiscription(){
         return this.discriptionTextField.getText();
     }
-    public void setInputDate(Date date){
+    public void setInputDueDate(Date date){
         yearComboBox.setSelectedItem( ((Integer)date.getYear()).toString());
-        monthComboBox.setSelectedItem(((Integer)date.getMonth()).toString());
+        monthComboBox.setSelectedItem(((Integer)(date.getMonth()+1)).toString());//java库中月份是以1开始的!
         dateComboBox.setSelectedItem(((Integer)date.getDate()).toString());
     }
     public void setInputDiscription(String discription){
         this.discriptionTextField.setText(discription);
+    }
+    
+    public Date getDueDate(){
+        return this._task.getDueDate();
+    }
+    public void setDueDate(Date date){
+        this._task.setDueDate(date);
+    }
+    public String getDiscription(){
+        return this._task.getDiscription();
+    }
+    public void setDiscription(String discription){
+        this._task.setDiscription(discription);
+    }
+
+    private String getInputTitle() {
+        return this._taskTitleField.getText();
     }
 
 }

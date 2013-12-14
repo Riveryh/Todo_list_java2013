@@ -65,6 +65,7 @@ public class TaskListPanel extends javax.swing.JPanel implements
             __box = (ListBox) this.add(__task=_iterator.next());
         }
         _list.addTaskListListener(this);
+        updateUI();
     }
 
     /**
@@ -83,8 +84,6 @@ public class TaskListPanel extends javax.swing.JPanel implements
         _taskBoxCount++;
         //this.setSize(new java.awt.Dimension(_WIDTH,(_HEIGHT)*_taskBoxCount+_vgap*_taskBoxCount+100));
         Component _comp = super.add(comp); //To change body of generated methods, choose Tools | Templates.
-        
-        //this.updateUI();
         return _comp;
     } 
     
@@ -103,6 +102,7 @@ public class TaskListPanel extends javax.swing.JPanel implements
          */
         comp.addMouseMotionListener(dragListener);//添加鼠标拖动监听器.
         comp.addMouseListener(dragListener);
+        
         super.updateUI();
         return comp;
     }
@@ -114,6 +114,7 @@ public class TaskListPanel extends javax.swing.JPanel implements
         AddTaskBox addBox = new AddTaskBox(this);       
         */
         this.add(getNewTask());
+        updateUI();
     }
     
     
@@ -136,22 +137,30 @@ public class TaskListPanel extends javax.swing.JPanel implements
 
     @Override
     public void updateUI() {
-        /**
-         * 先按照order顺序对TaskBox进行排序.
-         * TODO:add操作在box很多的时候非常耗时间，需要优化.
-         */
-        Component temp;
-        Component temp2;
+        int _newPanelHeight;
+        TaskBox temp = null;  //存储当前box
+        TaskBox temp2 = null; //存储上一个box
         this.removeAll();//移除所有boxes的显示.
+        TaskSpliterBox.reset();
         
         this._taskBoxCount = 0;
         if(_boxes!=null){
             Iterator<Component> iterator = _boxes.iterator();
             while(iterator.hasNext()){
-                temp = iterator.next();
+                temp = (TaskBox)iterator.next();
                 /**
-                 * TODO: 此处添加判断:是否为同一天的task，不是则加入一条分割线.
+                 * 此处判断:是否为同一天的task，不是则加入一条分割线.
                  */
+                if(temp2 != null){  //如果不是第一个box，那么判断两个box是否是同一天的
+                    if(temp.getDueDate().getDate()==temp2.getDueDate().getDate()){
+                        //如果是同一天，则不加入分割线.
+                    }else{
+                        this.add(new TaskSpliterBox(temp.getDueDate()));
+                    }           
+                }else{      //如果是第一天，那么必须加入第一天的时间标签
+                    this.add(new TaskSpliterBox(temp.getDueDate()));
+                }
+                temp2 = temp;
                 this.add(temp);
             }
         }

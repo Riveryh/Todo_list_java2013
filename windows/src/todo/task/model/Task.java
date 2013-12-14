@@ -64,43 +64,43 @@ public class Task implements Serializable{
 		return __startDate;
 	}
 	public void setStartDate(Date startDate) {
-                __parent.onTaskChanged(this);
 		this.__startDate = startDate;
+                __parent.onTaskChanged(this);
 	}
 	public Date getDueDate() {
 		return __dueDate;
 	}
 	public void setDueDate(Date dueDate) {
-                __parent.onTaskChanged(this);
 		this.__dueDate = dueDate;
+                __parent.onTaskChanged(this);
 	}
 	public Date getEstablishedDate() {
 		return __establishedDate;
 	}
 	public void setEstablishedDate(Date establishedDate) {
-                __parent.onTaskChanged(this);
 		this.__establishedDate = establishedDate;
+                __parent.onTaskChanged(this);
 	}
 	public String getTitle() {
 		return __title;
 	}
 	public void setTitle(String title) {
-                __parent.onTaskChanged(this);
 		this.__title = title;
+                __parent.onTaskChanged(this);
 	}
 	public String getDiscription() {
 		return __discription;
 	}
 	public void setDiscription(String discription) {
-                __parent.onTaskChanged(this);
 		this.__discription = discription;
+                __parent.onTaskChanged(this);
 	}
 	public boolean isCompleted() {
 		return __isCompleted;
 	}
 	public void setCompleted(boolean isCompleted) {
-                __parent.onTaskChanged(this);
 		this.__isCompleted = isCompleted;
+                __parent.onTaskChanged(this);
 	}
         public TaskList getBelongTo(){
                 return __parent;

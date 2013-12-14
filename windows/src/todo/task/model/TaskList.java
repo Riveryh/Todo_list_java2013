@@ -211,6 +211,11 @@ public class TaskList extends LinkedList<Task> {
 
     public void onTaskChanged(Task task) {
         __listener.onTaskListChanged();
+        try {
+            this.save();
+        } catch (IOException ex) {
+            Logger.getLogger(TaskList.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void addTaskListListener(todo.task.util.TaskListListener l) {
