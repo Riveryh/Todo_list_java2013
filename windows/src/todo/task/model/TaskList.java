@@ -22,8 +22,10 @@ import todo.task.util.TaskListListener;
 public class TaskList extends LinkedList<Task> {
 
     private File __file;
-    private TaskListListener __listener;
-    private HashMap<Integer, Task> __mapOrderToTask;
+    
+    //必须将__listener标记为transient属性，不然序列化的时候会把整个taskListPanel都写进去！
+    private transient TaskListListener __listener;  
+
 
     /**
      * 注意：此构造方法只会在TaskListFile.dat不存在的时候才会被调用, order是从0开始，index也从0开始！
@@ -32,7 +34,6 @@ public class TaskList extends LinkedList<Task> {
      */
     public TaskList(String filePath) {
         __file = new File(filePath);
-        __mapOrderToTask = new HashMap<Integer, Task>();
     }
 
     /**
@@ -60,7 +61,6 @@ public class TaskList extends LinkedList<Task> {
              */
             this.get(__index).setOrder(__index);
         }
-        __mapOrderToTask.put(order, task);
 
         try {
             this.save();
@@ -139,6 +139,15 @@ public class TaskList extends LinkedList<Task> {
     public Task getNewTask(){
         Task __task = new Task("new Task"+size(),this);
         this.add(__task);
+        return __task;
+    }
+    public Task getNewTask(String title,int order) {
+        Task __task = new Task(title,this);
+        this.add(order,__task);
+        //根据前后关系调整任务的截止日期
+        if(order>0){
+            __task.setDueDate(this.get(order-1).getDueDate());
+        }
         return __task;
     }
 
@@ -223,4 +232,6 @@ public class TaskList extends LinkedList<Task> {
             __listener = l;
         }
     }
+
+    
 }

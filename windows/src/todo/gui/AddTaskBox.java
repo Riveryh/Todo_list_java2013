@@ -13,9 +13,10 @@ import todo.task.model.Task;
  *
  * @author huangyuhan
  */
-public class AddTaskBox extends TaskBox{
+public class AddTaskBox extends javax.swing.JPanel{
     private AddTaskBox _thisBox = this;
     private TaskListPanel _parent ;
+    private int _lastOrder;
     
 
     /**
@@ -23,45 +24,15 @@ public class AddTaskBox extends TaskBox{
      */
     public AddTaskBox() {
     }
-    public AddTaskBox(TaskListPanel parent){
+    public AddTaskBox(TaskListPanel parent,int lastOrder){
         this._parent = parent;
-        initComponents();
-        this.taskBox1.getTextField().setText("New Task");
-        this.taskBox1.getTextField().addFocusListener(new FocusAdapter(){
-            public void focusLost(FocusEvent e){
-                _thisBox.doAdd();
-            }
-        });
-        this.taskBox1.setOrder(parent.getTaskBoxCount()+1);
+        this._lastOrder = lastOrder;
+        this.setBackground(new java.awt.Color(250,250,250));
+        this.setPreferredSize(new java.awt.Dimension(TaskBox._WIDTH,TaskBox._HEIGHT));       
+        initComponents();       
     }
     
-  
-    public int getOrder(){
-        return this.taskBox1.getOrder();
-    }
-    
-    public void doAdd(){
-        TaskListPanel _listPanel = (TaskListPanel) this.getParent();
-        if(this.getTitle().equalsIgnoreCase("")){
-            
-        }else{
-            _listPanel.add(generateTask());
-            _listPanel.remove(this);
-            _listPanel.getList().remove(this.taskBox1.getTask());
-        }
-    }
-    
-    
-    
-    public Task generateTask(){
-        Task _task;
-        _task = new Task(this.taskBox1.getTextField().getText(),((TaskListPanel) this.getParent()).getTaskList());
-        return _task;
-    }
-    
-    public String getTitle(){
-        return this.taskBox1.getTextField().getText();
-    }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -72,13 +43,60 @@ public class AddTaskBox extends TaskBox{
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        taskBox1 = new todo.gui.TaskBox(_parent);
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(40, 40), new java.awt.Dimension(0, 0));
+        jTextField1 = new javax.swing.JTextField();
 
-        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        add(taskBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 230, -1));
+        java.awt.FlowLayout flowLayout1 = new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0);
+        flowLayout1.setAlignOnBaseline(true);
+        setLayout(flowLayout1);
+        add(filler1);
+
+        jTextField1.setFont(new java.awt.Font("Microsoft YaHei UI Light", 0, 22)); // NOI18N
+        jTextField1.setForeground(new java.awt.Color(204, 204, 204));
+        jTextField1.setText("点击以添加");
+        jTextField1.setToolTipText("");
+        jTextField1.setBorder(null);
+        jTextField1.setPreferredSize(new java.awt.Dimension(205, 30));
+        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField1ActionPerformed(evt);
+            }
+        });
+        jTextField1.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jTextField1FocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextField1FocusLost(evt);
+            }
+        });
+        add(jTextField1);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        if(this.jTextField1.getText().equalsIgnoreCase("")){
+            this.jTextField1.setText("点击以添加");
+            this.jTextField1.setForeground(new java.awt.Color(204,204,204));
+        } else{
+            _parent.addTask(this.jTextField1.getText(),_lastOrder);
+        }
+    }//GEN-LAST:event_jTextField1ActionPerformed
+
+    private void jTextField1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField1FocusGained
+        this.jTextField1.setText("");
+        this.jTextField1.selectAll();
+        this.jTextField1.setForeground(new java.awt.Color(0,0,0));
+    }//GEN-LAST:event_jTextField1FocusGained
+
+    private void jTextField1FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField1FocusLost
+        if(this.jTextField1.getText().equalsIgnoreCase("")){
+            this.jTextField1.setText("点击以添加");
+            this.jTextField1.setForeground(new java.awt.Color(204,204,204));
+        }
+    }//GEN-LAST:event_jTextField1FocusLost
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private todo.gui.TaskBox taskBox1;
+    private javax.swing.Box.Filler filler1;
+    private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }

@@ -285,7 +285,12 @@ public class TaskBox extends javax.swing.JPanel  implements ListBox{
         _taskTitleField.setBackground(getBackground());
         _taskTitleField.setFont(new java.awt.Font("Microsoft YaHei UI Light", 0, 22)); // NOI18N
         _taskTitleField.setBorder(null);
-        _taskTitleField.setPreferredSize(new java.awt.Dimension(170, 30));
+        _taskTitleField.setPreferredSize(new java.awt.Dimension(205, 30));
+        _taskTitleField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                _taskTitleFieldActionPerformed(evt);
+            }
+        });
         _taskTitleField.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 _taskTitleFieldFocusGained(evt);
@@ -296,7 +301,7 @@ public class TaskBox extends javax.swing.JPanel  implements ListBox{
         });
         basicPanel.add(_taskTitleField);
 
-        dragLabel.setText(". . .");
+        dragLabel.setText("...");
         basicPanel.add(dragLabel);
 
         add(basicPanel);
@@ -346,6 +351,10 @@ public class TaskBox extends javax.swing.JPanel  implements ListBox{
             _mouseEntered = true;
         }
     }//GEN-LAST:event_popupPanelMouseMoved
+
+    private void _taskTitleFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__taskTitleFieldActionPerformed
+        doSubmit();
+    }//GEN-LAST:event__taskTitleFieldActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox _checkBox;

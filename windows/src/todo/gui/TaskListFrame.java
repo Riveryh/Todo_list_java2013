@@ -52,9 +52,9 @@ public class TaskListFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         commandText = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         submitButton = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         taskListPanel2 = new todo.gui.TaskListPanel(this._list);
         jButton2 = new javax.swing.JButton();
@@ -71,6 +71,16 @@ public class TaskListFrame extends javax.swing.JFrame {
             }
         });
 
+        jButton1.setBackground(new java.awt.Color(51, 204, 255));
+        jButton1.setText("+");
+        jButton1.setBorder(null);
+        jButton1.setPreferredSize(new java.awt.Dimension(15, 15));
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
         setBounds(new java.awt.Rectangle(640, 480, 300, 400));
@@ -82,24 +92,9 @@ public class TaskListFrame extends javax.swing.JFrame {
 
         submitButton.setBackground(new java.awt.Color(255, 153, 51));
         submitButton.setText("debug");
-        submitButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                submitButtonMouseClicked(evt);
-            }
-        });
-
-        jButton1.setBackground(new java.awt.Color(51, 204, 255));
-        jButton1.setText("+");
-        jButton1.setBorder(null);
-        jButton1.setPreferredSize(new java.awt.Dimension(15, 15));
-        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton1MouseClicked(evt);
-            }
-        });
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        submitButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                submitButtonActionPerformed(evt);
             }
         });
 
@@ -113,9 +108,9 @@ public class TaskListFrame extends javax.swing.JFrame {
         jButton2.setText("X");
         jButton2.setBorder(null);
         jButton2.setPreferredSize(new java.awt.Dimension(15, 15));
-        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton2MouseClicked(evt);
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
             }
         });
 
@@ -124,9 +119,7 @@ public class TaskListFrame extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(153, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addContainerGap(188, Short.MAX_VALUE)
                 .addComponent(submitButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -138,7 +131,6 @@ public class TaskListFrame extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(submitButton)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 434, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -164,13 +156,6 @@ public class TaskListFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void submitButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_submitButtonMouseClicked
-        // TODO add your handling code here:
-        String commands = this.commandText.getText();
-        Todo.commandMode(commands, _list);
-        this.invalidate();
-    }//GEN-LAST:event_submitButtonMouseClicked
-
     private void commandTextMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_commandTextMouseClicked
         // TODO add your handling code here:
         commandText.selectAll();
@@ -184,16 +169,18 @@ public class TaskListFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_commandTextKeyPressed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        this.taskListPanel2.addTask();
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
-        this.taskListPanel2.addTask();
-    }//GEN-LAST:event_jButton1MouseClicked
+    private void submitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitButtonActionPerformed
+        String commands = this.commandText.getText();
+        Todo.commandMode(commands, _list);
+        this.invalidate();
+    }//GEN-LAST:event_submitButtonActionPerformed
 
-    private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         this.dispose();// 关闭当前窗口
-    }//GEN-LAST:event_jButton2MouseClicked
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments

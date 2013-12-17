@@ -278,17 +278,18 @@
               <Border info="null"/>
             </Property>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-              <Dimension value="[170, 30]"/>
+              <Dimension value="[205, 30]"/>
             </Property>
           </Properties>
           <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="_taskTitleFieldActionPerformed"/>
             <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="_taskTitleFieldFocusGained"/>
             <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="_taskTitleFieldFocusLost"/>
           </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="dragLabel">
           <Properties>
-            <Property name="text" type="java.lang.String" value=". . ."/>
+            <Property name="text" type="java.lang.String" value="..."/>
           </Properties>
         </Component>
       </SubComponents>

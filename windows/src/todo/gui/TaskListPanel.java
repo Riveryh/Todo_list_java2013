@@ -34,7 +34,7 @@ public class TaskListPanel extends javax.swing.JPanel implements
     
     private TaskList _list;
     private int _taskBoxCount=0;
-    private int _vgap=3;    //表示两个taskBox之间的间距；
+    private int _vgap=2;    //表示两个taskBox之间的间距；
     private int _zOrder;
     private LayoutManager layout;
     private HashMap<Integer,ListBox> _mapOrderToBox;
@@ -116,6 +116,10 @@ public class TaskListPanel extends javax.swing.JPanel implements
         this.add(getNewTask());
         updateUI();
     }
+    public void addTask(String title,int lastOrder){
+        this.add(getNewTask(title,lastOrder+1));
+        updateUI();
+    }
     
     
     public Point getTaskBoxLocation(TaskBox box){       
@@ -124,6 +128,9 @@ public class TaskListPanel extends javax.swing.JPanel implements
     
     public Task getNewTask(){
         return _list.getNewTask();
+    }
+    public Task getNewTask(String title,int order){
+        return _list.getNewTask(title,order);
     }
     
 
@@ -155,6 +162,7 @@ public class TaskListPanel extends javax.swing.JPanel implements
                     if(temp.getDueDate().getDate()==temp2.getDueDate().getDate()){
                         //如果是同一天，则不加入分割线.
                     }else{
+                        this.add(new AddTaskBox(this,temp2.getOrder()));
                         this.add(new TaskSpliterBox(temp.getDueDate()));
                     }           
                 }else{      //如果是第一天，那么必须加入第一天的时间标签
@@ -163,6 +171,12 @@ public class TaskListPanel extends javax.swing.JPanel implements
                 temp2 = temp;
                 this.add(temp);
             }
+            if(temp2!=null){
+                this.add(new AddTaskBox(this,temp2.getOrder()));
+            }else{
+                this.add(new AddTaskBox(this,-1));
+            }
+            
         }
         super.updateUI(); 
     }
