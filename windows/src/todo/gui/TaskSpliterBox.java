@@ -5,6 +5,7 @@
  */
 package todo.gui;
 
+import java.awt.Color;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -15,34 +16,35 @@ import java.util.Locale;
  */
 public class TaskSpliterBox extends javax.swing.JPanel {
     
-    private static Calendar _earliestCal;
+    private static Calendar _todayCal;
+    
+    public static final int _SPLITER_HEIGHT = 26;
 
     /**
      * Creates new form TaskSpliterBox
      */
     private TaskSpliterBox() {
         initComponents();
+        //this.setBackground(new Color(235,235,235));
+        this.setPreferredSize(new java.awt.Dimension(TaskBox._WIDTH,_SPLITER_HEIGHT));
+         _todayCal = Calendar.getInstance();
+         _todayCal.setFirstDayOfWeek(Calendar.MONDAY);
     }
     public TaskSpliterBox(Date date){
         this();
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
-        if(_earliestCal==null){
-            _earliestCal = cal;
-        }else if(cal.before(_earliestCal)){
-            _earliestCal = cal;
-        }
-        
+       
         cal.setFirstDayOfWeek(Calendar.MONDAY);
         
-        if(cal.get(Calendar.WEEK_OF_YEAR) - _earliestCal.get(Calendar.WEEK_OF_YEAR) == 1){
+        if(cal.get(Calendar.WEEK_OF_YEAR) - _todayCal.get(Calendar.WEEK_OF_YEAR) == 1){
             //如果时间跨度超过一周，那么标签前面就要加上下周两个字;
             this.setText("下"+cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.CHINESE));
-        }else if(cal.get(Calendar.WEEK_OF_YEAR) == _earliestCal.get(Calendar.WEEK_OF_YEAR)){
+        }else if(cal.get(Calendar.WEEK_OF_YEAR) == _todayCal.get(Calendar.WEEK_OF_YEAR)){
             this.setText(cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.CHINESE));
         }else{
-            this.setText(cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.CHINESE)
-                         + cal.getDisplayName(Calendar.DATE, Calendar.SHORT, Locale.CHINESE) );
+            this.setText((cal.get(Calendar.MONTH)+1)+"月"
+                         +cal.get(Calendar.DATE)+"日") ;
         }
         
     }
@@ -52,7 +54,7 @@ public class TaskSpliterBox extends javax.swing.JPanel {
     }
     
     public static void reset(){
-        _earliestCal = null;
+        _todayCal = null;
     }
 
     /**
@@ -70,6 +72,7 @@ public class TaskSpliterBox extends javax.swing.JPanel {
         setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
 
         jLabel1.setFont(new java.awt.Font("Microsoft YaHei UI Light", 0, 18)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(153, 153, 153));
         jLabel1.setText("jLabel1");
         jLabel1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         add(jLabel1);

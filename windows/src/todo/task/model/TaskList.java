@@ -71,7 +71,7 @@ public class TaskList extends LinkedList<Task> {
 
     @Override
     public boolean add(Task task) {
-        this.add(0, task);
+        this.add(size(), task);
         return true;
     }
 

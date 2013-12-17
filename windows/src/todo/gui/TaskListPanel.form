@@ -20,6 +20,7 @@
   </AuxValues>
 
   <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout">
+    <Property name="alignment" type="int" value="0"/>
     <Property name="verticalGap" type="int" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
       <Connection code="_vgap" type="code"/>
     </Property>

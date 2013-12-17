@@ -259,7 +259,7 @@ public class TaskListPanel extends javax.swing.JPanel implements
     private void initComponents() {
 
         setMaximumSize(new java.awt.Dimension(_WIDTH,_HEIGHT*_taskBoxCount+_vgap*_taskBoxCount));
-        setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, _vgap));
+        setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, _vgap));
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
