@@ -14,7 +14,7 @@ import java.util.Locale;
  *
  * @author huangyuhan
  */
-public class TaskSpliterBox extends javax.swing.JPanel {
+public class TaskSpliterBox extends javax.swing.JPanel implements ListBox{
     
     private static Calendar _todayCal;
     
@@ -55,6 +55,12 @@ public class TaskSpliterBox extends javax.swing.JPanel {
     
     public static void reset(){
         _todayCal = null;
+    }
+    
+    
+    @Override
+    public int getOrder() {
+        return -3;              //时间标签box的order定义为-3
     }
 
     /**

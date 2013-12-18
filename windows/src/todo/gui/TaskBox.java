@@ -38,6 +38,8 @@ public class TaskBox extends javax.swing.JPanel  implements ListBox{
     private javax.swing.PopupFactory _popupFactory;
     private Popup pop;
     private boolean _mouseEntered=false;
+    private boolean _isDragged = false;
+    private DragBoxListener dragListener;
     
     static int _WIDTH = 280;
     static int _HEIGHT= 45;
@@ -51,6 +53,7 @@ public class TaskBox extends javax.swing.JPanel  implements ListBox{
      */
      public TaskBox(){
         super();
+        dragListener = new DragBoxListener();
         initComponents();
      }
      /**
@@ -73,18 +76,17 @@ public class TaskBox extends javax.swing.JPanel  implements ListBox{
         _dCE = new DefaultCellEditor(new javax.swing.JTextField());        
         /**
          * 添加事件监听器.
+         * 注册motionListener用来检测drag事件，
+         * 注册mouseListener用来检测click事件，以记录初始坐标和释放坐标.
          */
+        this.addMouseMotionListener(dragListener);
+        this.addMouseListener(dragListener);        
         this.addMouseListener(new MouseAdapter(){
+            @Override
             public void mouseClicked(MouseEvent e){
                 System.out.println("mouseClicked");
                 _thisBox._task.setCompleted(_thisBox._checkBox.isSelected());
                 _thisBox._taskTitleField.selectAll();
-                _thisBox.refresh();
-            }
-        });
-        this.addKeyListener(new KeyAdapter(){
-            public void keyTyped(KeyEvent e){
-                _thisBox._task.setTitle(_thisBox._taskTitleField.getText());
                 _thisBox.refresh();
             }
         });
@@ -144,6 +146,13 @@ public class TaskBox extends javax.swing.JPanel  implements ListBox{
     public void setOrder(int order){
         this._task.setOrder(order);
     }
+    
+    public void setDragged(boolean b){
+        this._isDragged = b;
+    }
+    public boolean isDragged(){
+        return this._isDragged;
+    }
   
     private void refresh(){
         if(_task!=null){
@@ -197,6 +206,8 @@ public class TaskBox extends javax.swing.JPanel  implements ListBox{
         popupPanel.setFocusTraversalPolicyProvider(true);
         popupPanel.setFont(new java.awt.Font("STXihei", 0, 15)); // NOI18N
         popupPanel.setPreferredSize(new Dimension(_WIDTH+5,_POPUP_HEIGHT));
+        popupPanel.setRequestFocusEnabled(false);
+        popupPanel.setVerifyInputWhenFocusTarget(false);
         popupPanel.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseMoved(java.awt.event.MouseEvent evt) {
                 popupPanelMouseMoved(evt);
@@ -246,9 +257,9 @@ public class TaskBox extends javax.swing.JPanel  implements ListBox{
         submitButton.setText("do");
         submitButton.setActionCommand("Y");
         submitButton.setPreferredSize(new java.awt.Dimension(64, 30));
-        submitButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                submitButtonMouseClicked(evt);
+        submitButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                submitButtonActionPerformed(evt);
             }
         });
         popupPanel.add(submitButton);
@@ -323,10 +334,6 @@ public class TaskBox extends javax.swing.JPanel  implements ListBox{
         pop.show();
     }//GEN-LAST:event__taskTitleFieldFocusGained
 
-    private void submitButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_submitButtonMouseClicked
-        this.doSubmit();       
-    }//GEN-LAST:event_submitButtonMouseClicked
-
     private void _taskTitleFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event__taskTitleFieldFocusLost
         this._task.setTitle(this.getInputTitle());
     }//GEN-LAST:event__taskTitleFieldFocusLost
@@ -355,6 +362,10 @@ public class TaskBox extends javax.swing.JPanel  implements ListBox{
     private void _taskTitleFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__taskTitleFieldActionPerformed
         doSubmit();
     }//GEN-LAST:event__taskTitleFieldActionPerformed
+
+    private void submitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitButtonActionPerformed
+        doSubmit();
+    }//GEN-LAST:event_submitButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox _checkBox;

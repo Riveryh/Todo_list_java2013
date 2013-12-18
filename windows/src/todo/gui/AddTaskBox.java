@@ -13,7 +13,7 @@ import todo.task.model.Task;
  *
  * @author huangyuhan
  */
-public class AddTaskBox extends javax.swing.JPanel{
+public class AddTaskBox extends javax.swing.JPanel implements ListBox{
     private AddTaskBox _thisBox = this;
     private TaskListPanel _parent ;
     private int _lastOrder;
@@ -33,6 +33,10 @@ public class AddTaskBox extends javax.swing.JPanel{
     }
     
 
+    @Override
+    public int getOrder() {
+        return -2;              //新建标签的order定义为-2
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
