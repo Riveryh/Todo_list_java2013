@@ -58,9 +58,9 @@ public class TaskList extends LinkedList<Task> {
         System.out.println("Task Added!");
         super.add(order, task);
         for (int __index = 0; __index < this.size(); __index++) {
-        /**
-         * 对原有task进行遍历，保持index和order的一致性.
-         */
+            /**
+             * 对原有task进行遍历，保持index和order的一致性.
+             */
             this.get(__index).setOrder(__index);
         }
 

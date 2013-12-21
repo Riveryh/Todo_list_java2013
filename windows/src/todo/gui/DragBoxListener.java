@@ -50,22 +50,17 @@ public class DragBoxListener extends MouseAdapter implements Serializable{
             /** 转换坐标系统 .
              *  @TODO ::在目前的情况下会出为题，为什么.
              */
-            TaskListPanel __parent = (TaskListPanel) e.getComponent().getParent();
+           
             Point newPoint = SwingUtilities.convertPoint(e.getComponent(), e  
-                        .getPoint(), __parent);  
-            ((TaskBox)e.getComponent()).setDragged(true);
+                        .getPoint(), e.getComponent().getParent());  
 
 
-            
             if(0 == __dragType){
-                if(abs(newPoint.x-startPoint.x)+abs(newPoint.y-startPoint.y)>10){
-                //  ^  容错，当偏移总距离超过10才进行判定
-                    if(abs(newPoint.getX()-point.getX()) > 
-                            abs(newPoint.getY()-point.getY())){
-                        __dragType = 1;//水平滑动删除
-                    }else{
-                        __dragType = 2;//竖直滑动排序
-                    }
+                if(abs(newPoint.getX()-point.getX()) > 
+                        abs(newPoint.getY()-point.getY())){
+                    __dragType = 1;//水平滑动删除
+                }else{
+                    __dragType = 2;//竖直滑动排序
                 }
             }
 
@@ -88,12 +83,10 @@ public class DragBoxListener extends MouseAdapter implements Serializable{
                 }else{
                     ((TaskBox)__draggedComponent) .setBackground(__backGroundColor);
                 }
-                __isDragged = true;
                 
             }else if(__dragType==2){  //判定用户操作为竖直滑动
                 
-                System.out.println(__parent.getOrderAt(newPoint));
-                
+
                 // 设置标签的新位置  
                 e.getComponent().setLocation(startLocation.x + OFFSET
                         , startLocation.y  
@@ -106,9 +99,8 @@ public class DragBoxListener extends MouseAdapter implements Serializable{
                     ((TaskBox)__draggedComponent) .setBackground(__changeOrderColor);
                 }else{
                 }
-                
-            __isDragged = true;
             }
+            __isDragged = true;
         }  
   
         /** 
@@ -143,8 +135,18 @@ public class DragBoxListener extends MouseAdapter implements Serializable{
                     panel = (TaskListPanel)e.getComponent().getParent();
                
                     oldOrder = ((ListBox)__draggedComponent) .getOrder();
-                    newOrder  =  ((TaskListPanel)__draggedComponent.getParent())
-                            .getOrderAt(point);
+
+                    __maxSize = ((TaskListPanel)__draggedComponent.getParent()).getList().size();
+                    __inSize  = ((TaskListPanel)__draggedComponent.getParent())
+                                    .getIndexAtLocation(point);
+                    if(__inSize > __maxSize){
+                        newOrder=__maxSize-1;
+                    }else{
+                        newOrder=__inSize-1;
+                    }
+                    if(newOrder<0){
+                        newOrder = 0;
+                    }
 
                     if(newOrder>=0){
                         ((TaskListPanel)__draggedComponent.getParent())
@@ -165,7 +167,6 @@ public class DragBoxListener extends MouseAdapter implements Serializable{
             __draggedComponent = null;
             __dragType = 0;
             startLocation = new Point(0,0);
-            ((TaskBox)e.getComponent()).setDragged(false);
         }
 
 }
