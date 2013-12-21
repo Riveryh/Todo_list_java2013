@@ -15,9 +15,9 @@ import todo.task.model.TaskList;
 
 public class Todo {
         private static TaskList _list;
-	public static String fileName = "TaskListFile.dat";
+	public static String fileName = "TaskListFile_.dat";
 	
-	public static void main(String[] arg) throws IOException, ClassNotFoundException, ParseException{
+	public static void _main(String[] arg) throws IOException, ClassNotFoundException, ParseException{
 		
 		
 		try{

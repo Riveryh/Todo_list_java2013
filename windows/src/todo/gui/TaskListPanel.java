@@ -48,8 +48,14 @@ public class TaskListPanel extends javax.swing.JPanel implements
     public TaskListPanel(TaskList list){
         this();
         this._list=list;
+        this.reLoad();
+    }
+    
+    public void reLoad(){
         Task __task;
         ListBox __box;
+        this.removeAll();
+        this._taskBoxes = new LinkedList<Component>();
         Iterator<Task> _iterator = _list.iterator();
         while(_iterator.hasNext()){
             __box = (ListBox) this.add(__task=_iterator.next());
@@ -255,7 +261,7 @@ public class TaskListPanel extends javax.swing.JPanel implements
      */
     public void changeOrder(int oldOrder, int newOrder){
         ListBox __box;
-        
+        this._list.get(oldOrder).setDueDate(_list.get(newOrder).getDueDate());
         _taskBoxes.add(newOrder,_taskBoxes.remove(oldOrder));
         this._list.changeOrder(oldOrder, newOrder);
         

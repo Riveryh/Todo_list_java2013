@@ -21,7 +21,8 @@ import todo.task.app.Todo;
  */
 public class TaskListFrame extends javax.swing.JFrame {
     
-    private TaskList _list;
+    private TaskList _todoList;
+    private TaskList _doneList;
 
     /**
      * 构造函数，接受TaskList参数并将其引用保存在类中,
@@ -32,12 +33,12 @@ public class TaskListFrame extends javax.swing.JFrame {
      */
     public TaskListFrame() {  
     }
-    public TaskListFrame(TaskList list){
+    public TaskListFrame(TaskList todoList,TaskList doneList){
         this();
         this.setUndecorated(true);
-        _list = list;
-        this.add(new JTextField());
-        Iterator<Task> _iterator = _list.iterator();      
+        _todoList = todoList;
+        _doneList = doneList;
+        _todoList.updateDueDate();//刷新所有过期任务的时间到今天.
         initComponents();
     }
     
@@ -53,11 +54,14 @@ public class TaskListFrame extends javax.swing.JFrame {
 
         commandText = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
-        jPanel1 = new javax.swing.JPanel();
-        submitButton = new javax.swing.JButton();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        taskListPanel2 = new todo.gui.TaskListPanel(this._list);
         jButton2 = new javax.swing.JButton();
+        submitButton = new javax.swing.JButton();
+        jToggleButton1 = new javax.swing.JToggleButton();
+        jPanel1 = new javax.swing.JPanel();
+        todoListPane = new javax.swing.JScrollPane();
+        taskListPanel2 = new todo.gui.TaskListPanel(this._todoList);
+        doneListPane = new javax.swing.JScrollPane();
+        taskListPanel1 = new todo.gui.TaskListPanel(this._doneList);
 
         commandText.setText("Input Commands");
         commandText.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -88,22 +92,6 @@ public class TaskListFrame extends javax.swing.JFrame {
         setUndecorated(true);
         setResizable(false);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
-
-        submitButton.setBackground(new java.awt.Color(255, 153, 51));
-        submitButton.setText("debug");
-        submitButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                submitButtonActionPerformed(evt);
-            }
-        });
-
-        jScrollPane2.setBorder(null);
-        jScrollPane2.setToolTipText("");
-
-        taskListPanel2.setPreferredSize(taskListPanel2.getPreferredSize());
-        jScrollPane2.setViewportView(taskListPanel2);
-
         jButton2.setBackground(new java.awt.Color(255, 0, 51));
         jButton2.setText("X");
         jButton2.setBorder(null);
@@ -114,43 +102,63 @@ public class TaskListFrame extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(188, Short.MAX_VALUE)
-                .addComponent(submitButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 296, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(submitButton)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 434, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                    .addGap(0, 39, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 422, javax.swing.GroupLayout.PREFERRED_SIZE)))
-        );
+        submitButton.setBackground(new java.awt.Color(255, 153, 51));
+        submitButton.setText("debug");
+        submitButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                submitButtonActionPerformed(evt);
+            }
+        });
+
+        jToggleButton1.setText("Done/Undo");
+        jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jToggleButton1ActionPerformed(evt);
+            }
+        });
+
+        jPanel1.setLayout(new java.awt.CardLayout());
+
+        todoListPane.setBorder(null);
+        todoListPane.setToolTipText("");
+        todoListPane.setPreferredSize(new java.awt.Dimension(300, 500));
+
+        taskListPanel2.setPreferredSize(new java.awt.Dimension(300, 80));
+        todoListPane.setViewportView(taskListPanel2);
+        taskListPanel2.getAccessibleContext().setAccessibleName("");
+
+        jPanel1.add(todoListPane, "card2");
+        todoListPane.getAccessibleContext().setAccessibleName("Todo");
+
+        doneListPane.setBorder(null);
+        doneListPane.setViewportView(taskListPanel1);
+
+        jPanel1.add(doneListPane, "card3");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jToggleButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(submitButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(submitButton))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 511, Short.MAX_VALUE))
         );
 
         pack();
@@ -172,15 +180,21 @@ public class TaskListFrame extends javax.swing.JFrame {
         this.taskListPanel2.addTask();
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void submitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitButtonActionPerformed
-        String commands = this.commandText.getText();
-        Todo.commandMode(commands, _list);
-        this.invalidate();
-    }//GEN-LAST:event_submitButtonActionPerformed
-
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         this.dispose();// 关闭当前窗口
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void submitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitButtonActionPerformed
+        String commands = this.commandText.getText();
+        Todo.commandMode(commands, _todoList);
+        this.invalidate();
+    }//GEN-LAST:event_submitButtonActionPerformed
+
+    private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
+        ((java.awt.CardLayout)this.jPanel1.getLayout()).next(jPanel1);
+        this.taskListPanel1.reLoad();
+        this.taskListPanel2.reLoad();
+    }//GEN-LAST:event_jToggleButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -221,11 +235,14 @@ public class TaskListFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField commandText;
+    private javax.swing.JScrollPane doneListPane;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JButton submitButton;
+    private todo.gui.TaskListPanel taskListPanel1;
     private todo.gui.TaskListPanel taskListPanel2;
+    private javax.swing.JScrollPane todoListPane;
     // End of variables declaration//GEN-END:variables
 }

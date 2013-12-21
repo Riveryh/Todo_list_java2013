@@ -19,15 +19,26 @@ public class MainWindow{
          * @throws IOException 
          */
 	public static void main(String[] args) throws ClassNotFoundException, IOException {
-		TaskList list;
-		String fileName = "TaskListFile.dat";
+		TaskList todoList;
+                TaskList doneList;
+		String todoListFileName = "TodoListFile.dat";
+                String doneListFileName = "DoneListFile.dat";
                 
 		try{
-			list = TaskList.open(new File(fileName));
+			todoList = TaskList.open(new File(todoListFileName));
 		}catch(IOException e1){
-			TaskList.save(new File(fileName), new TaskList(fileName));
-			list = TaskList.open(new File(fileName));
+			TaskList.save(new File(todoListFileName), new TaskList(todoListFileName));
+			todoList = TaskList.open(new File(todoListFileName));
 		}
+                try{
+			doneList = TaskList.open(new File(doneListFileName));
+		}catch(IOException e1){
+			TaskList.save(new File(doneListFileName), new TaskList(doneListFileName));
+			doneList = TaskList.open(new File(doneListFileName));
+		}
+                
+                todoList.setAnotherList(doneList);
+                doneList.setAnotherList(todoList);
                 
                 //设置界面样式为windows默认界面    
                 try {
@@ -43,7 +54,7 @@ public class MainWindow{
                 UIManager.put("ScrollBar.width", new Integer(5)); //设置界面滚动条宽度
 		
                 //JFrame.setDefaultLookAndFeelDecorated(true);
-		final JFrame frame=new TaskListFrame(list);
+		final JFrame frame=new TaskListFrame(todoList,doneList);
                 //frame.setUndecorated(true);
                 
                 //因为去掉了标题栏，所以要添加鼠标监听器检测拖动

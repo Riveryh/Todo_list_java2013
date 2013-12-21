@@ -8,6 +8,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -25,6 +26,7 @@ public class TaskList extends LinkedList<Task> {
     
     //必须将__listener标记为transient属性，不然序列化的时候会把整个taskListPanel都写进去！
     private transient TaskListListener __listener;  
+    public transient TaskList __anotherList;
 
 
     /**
@@ -219,7 +221,9 @@ public class TaskList extends LinkedList<Task> {
     }
 
     public void onTaskChanged(Task task) {
-        __listener.onTaskListChanged();
+        if(__listener!=null){
+            __listener.onTaskListChanged();
+        }
         try {
             this.save();
         } catch (IOException ex) {
@@ -231,6 +235,26 @@ public class TaskList extends LinkedList<Task> {
         if (__listener == null) {
             __listener = l;
         }
+    }
+    
+    public void updateDueDate(){
+        Iterator<Task> it = this.iterator();
+        Task _task=null;
+        Date today = new Date();
+        while(it.hasNext()){
+            _task = it.next();
+            if(_task.getDueDate().before(today)){
+                _task.setDueDate(today);
+            }
+        }
+    }
+    
+    public void setAnotherList(TaskList list){
+        this.__anotherList = list;
+    }
+    
+    public TaskList getAnotherList(){
+        return this.__anotherList;
     }
 
     

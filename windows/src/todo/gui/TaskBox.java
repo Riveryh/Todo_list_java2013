@@ -323,7 +323,11 @@ public class TaskBox extends javax.swing.JPanel  implements ListBox{
     }//GEN-LAST:event_yearComboBoxActionPerformed
 
     private void _checkBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__checkBoxActionPerformed
-        // TODO add your handling code here:
+        if(this._checkBox.isSelected()){
+            this._task.setCompleted();
+        }else{
+            this._task.setUncompleted();
+        }
     }//GEN-LAST:event__checkBoxActionPerformed
 
     private void _taskTitleFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event__taskTitleFieldFocusGained

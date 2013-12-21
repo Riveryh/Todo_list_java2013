@@ -102,6 +102,20 @@ public class Task implements Serializable{
 		this.__isCompleted = isCompleted;
                 __parent.onTaskChanged(this);
 	}
+        public void setCompleted(){
+            this.__isCompleted = true;
+            __parent.remove(this);
+            this.__order = 0;
+            __parent = __parent.getAnotherList();
+            __parent.add(this);
+        }
+        public void setUncompleted(){
+            this.__isCompleted = false;
+            __parent.remove(this);
+            this.__order = 0;
+            __parent = __parent.getAnotherList();
+            __parent.add(this);
+        }
         public TaskList getBelongTo(){
                 return __parent;
         }

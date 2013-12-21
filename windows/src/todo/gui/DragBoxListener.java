@@ -146,8 +146,10 @@ public class DragBoxListener extends MouseAdapter implements Serializable{
                     newOrder  =  ((TaskListPanel)__draggedComponent.getParent())
                             .getOrderAt(point);
 
-                    ((TaskListPanel)__draggedComponent.getParent())
+                    if(newOrder>=0){
+                        ((TaskListPanel)__draggedComponent.getParent())
                                 .changeOrder(oldOrder, newOrder);                        
+                    }
                 }else if(__dragType==1){
                     if(abs(point.x-startPoint.x)>=CRITICAL*TaskBox._WIDTH){
                         ((TaskListPanel)__draggedComponent.getParent()).delet((ListBox)__draggedComponent);
