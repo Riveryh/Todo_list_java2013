@@ -192,8 +192,6 @@ public class TaskListFrame extends javax.swing.JFrame {
 
     private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
         ((java.awt.CardLayout)this.jPanel1.getLayout()).next(jPanel1);
-        this.taskListPanel1.reLoad();
-        this.taskListPanel2.reLoad();
     }//GEN-LAST:event_jToggleButton1ActionPerformed
 
     /**

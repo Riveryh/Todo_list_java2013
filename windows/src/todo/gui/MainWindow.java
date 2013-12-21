@@ -37,9 +37,6 @@ public class MainWindow{
 			doneList = TaskList.open(new File(doneListFileName));
 		}
                 
-                todoList.setAnotherList(doneList);
-                doneList.setAnotherList(todoList);
-                
                 //设置界面样式为windows默认界面    
                 try {
                     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
