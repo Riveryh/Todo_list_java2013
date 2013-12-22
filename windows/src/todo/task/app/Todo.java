@@ -11,20 +11,20 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import todo.task.model.Task;
 
-import todo.task.model.TaskList;
+import todo.task.model.TodoTaskList;
 
 public class Todo {
-        private static TaskList _list;
+        private static TodoTaskList _list;
 	public static String fileName = "TaskListFile_.dat";
 	
 	public static void _main(String[] arg) throws IOException, ClassNotFoundException, ParseException{
 		
 		
 		try{
-			_list = TaskList.open(new File(fileName));
+			_list = TodoTaskList.open(new File(fileName));
 		}catch(IOException e1){
-			TaskList.save(new File(fileName), new TaskList(fileName));
-			_list = TaskList.open(new File(fileName));
+			TodoTaskList.save(new File(fileName), new TodoTaskList(fileName));
+			_list = TodoTaskList.open(new File(fileName));
 		}
 		
 		Scanner sc = new Scanner(System.in);
@@ -74,14 +74,14 @@ public class Todo {
 		_list.save();
 	}
 	
-	public static void printList(TaskList list){
+	public static void printList(TodoTaskList list){
 		System.out.flush();
 		System.out.println("--------------------------------");
 		System.out.print(list);
 		System.out.println("--------------------------------");
 	}
         
-        public static void commandMode(String args,TaskList _list){
+        public static void commandMode(String args,TodoTaskList _list){
             
             String buffer;
             

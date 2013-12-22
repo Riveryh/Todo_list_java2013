@@ -18,7 +18,7 @@ public class TaskSpliterBox extends javax.swing.JPanel {
     
     private static Calendar _todayCal;
     
-    public static final int _SPLITER_HEIGHT = 26;
+    public static final int _SPLITER_HEIGHT = (int) (TaskBox._HEIGHT/2);
 
     /**
      * Creates new form TaskSpliterBox
@@ -71,7 +71,7 @@ public class TaskSpliterBox extends javax.swing.JPanel {
         setFont(new java.awt.Font("华康俪金黑W8", 0, 18)); // NOI18N
         setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
 
-        jLabel1.setFont(new java.awt.Font("Microsoft YaHei UI Light", 0, 18)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Microsoft YaHei UI Light", 0, (int)(TaskSpliterBox._SPLITER_HEIGHT*(2./3.))));
         jLabel1.setForeground(new java.awt.Color(153, 153, 153));
         jLabel1.setText("jLabel1");
         jLabel1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));

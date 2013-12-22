@@ -10,8 +10,6 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.ParseException;
@@ -36,14 +34,15 @@ public class TaskBox extends javax.swing.JPanel  implements ListBox{
     private TaskListPanel _parent;
     private boolean _isExtended=false;
     private javax.swing.PopupFactory _popupFactory;
-    private Popup pop;
     private boolean _mouseEntered=false;
     private boolean _isDragged = false;
     private DragBoxListener dragListener;
     
-    static int _WIDTH = 280;
-    static int _HEIGHT= 45;
+    static int _HEIGHT= 45;   //global scale reference!所有的尺度都以此为基准
+    static int _WIDTH = 6*_HEIGHT;
     static int _POPUP_HEIGHT = 150;
+    
+    private static Popup pop;   //同一时间只允许一个pop存在。
     
     /**
      * 含参数构造方法，接受一个Task对象，将它的引用保存在TaskBox对象内部，
@@ -54,7 +53,6 @@ public class TaskBox extends javax.swing.JPanel  implements ListBox{
      public TaskBox(){
         super();
         dragListener = new DragBoxListener();
-        initComponents();
      }
      /**
       * 此类型的构造方法在创建addTaskBox时候会被调用.
@@ -72,15 +70,19 @@ public class TaskBox extends javax.swing.JPanel  implements ListBox{
         this();
         _task = task;
         _parent = parent;
-        this.refresh();
+        initComponents();
+        this.refresh();    
         _dCE = new DefaultCellEditor(new javax.swing.JTextField());        
         /**
          * 添加事件监听器.
          * 注册motionListener用来检测drag事件，
          * 注册mouseListener用来检测click事件，以记录初始坐标和释放坐标.
+         * 未完成列表里面的任务才能拖拽排序，已完成列表内部的任务顺序是锁定的。
          */
-        this.addMouseMotionListener(dragListener);
-        this.addMouseListener(dragListener);        
+        if(!this._task.isCompleted()){
+            this.addMouseMotionListener(dragListener);
+            this.addMouseListener(dragListener);        
+        }
         this.addMouseListener(new MouseAdapter(){
             @Override
             public void mouseClicked(MouseEvent e){
@@ -205,7 +207,7 @@ public class TaskBox extends javax.swing.JPanel  implements ListBox{
         popupPanel.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 153, 204), 1, true));
         popupPanel.setFocusTraversalPolicyProvider(true);
         popupPanel.setFont(new java.awt.Font("STXihei", 0, 15)); // NOI18N
-        popupPanel.setPreferredSize(new Dimension(_WIDTH+5,_POPUP_HEIGHT));
+        popupPanel.setPreferredSize(new Dimension(280,_POPUP_HEIGHT));
         popupPanel.setRequestFocusEnabled(false);
         popupPanel.setVerifyInputWhenFocusTarget(false);
         popupPanel.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
@@ -280,7 +282,7 @@ public class TaskBox extends javax.swing.JPanel  implements ListBox{
         _checkBox.setMargin(new java.awt.Insets(4, 4, 4, 4));
         _checkBox.setMaximumSize(new java.awt.Dimension(40, 40));
         _checkBox.setMinimumSize(new java.awt.Dimension(40, 40));
-        _checkBox.setPreferredSize(new java.awt.Dimension(40, 40));
+        _checkBox.setPreferredSize(new java.awt.Dimension(_HEIGHT,_HEIGHT));
         _checkBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 _checkBoxActionPerformed(evt);
@@ -294,9 +296,11 @@ public class TaskBox extends javax.swing.JPanel  implements ListBox{
         });
 
         _taskTitleField.setBackground(getBackground());
-        _taskTitleField.setFont(new java.awt.Font("Microsoft YaHei UI Light", 0, 22)); // NOI18N
+        _taskTitleField.setFont(new java.awt.Font("Microsoft YaHei UI Light", 0, (_HEIGHT/2)));
+        _taskTitleField.setToolTipText("");
         _taskTitleField.setBorder(null);
-        _taskTitleField.setPreferredSize(new java.awt.Dimension(205, 30));
+        _taskTitleField.setMinimumSize(new java.awt.Dimension(150, 30));
+        _taskTitleField.setPreferredSize(new java.awt.Dimension(TaskBox._HEIGHT*4,TaskBox._HEIGHT));
         _taskTitleField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 _taskTitleFieldActionPerformed(evt);
@@ -312,7 +316,11 @@ public class TaskBox extends javax.swing.JPanel  implements ListBox{
         });
         basicPanel.add(_taskTitleField);
 
-        dragLabel.setText("...");
+        //未完成的列表中的任务box才添加可拖拽标记...
+        if(!this._task.isCompleted()){
+            dragLabel.setText("...");
+            dragLabel.setPreferredSize(new java.awt.Dimension(25, 20));
+        }
         basicPanel.add(dragLabel);
 
         add(basicPanel);
@@ -323,14 +331,21 @@ public class TaskBox extends javax.swing.JPanel  implements ListBox{
     }//GEN-LAST:event_yearComboBoxActionPerformed
 
     private void _checkBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__checkBoxActionPerformed
-        // TODO add your handling code here:
+        if(this._checkBox.isSelected()){
+            this._task.setCompleted();
+        }else{
+            this._task.setUncompleted();
+        }
     }//GEN-LAST:event__checkBoxActionPerformed
 
     private void _taskTitleFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event__taskTitleFieldFocusGained
         this.doAdd();
         java.awt.Point __point = this.getLocationOnScreen();
         _popupFactory = javax.swing.PopupFactory.getSharedInstance();
-        pop = _popupFactory.getPopup(_parent,popupPanel, __point.x-_WIDTH-10,__point.y);
+        if(pop!=null){
+            pop.hide();
+        }
+        pop = _popupFactory.getPopup(_parent,popupPanel, __point.x-290,__point.y);
         pop.show();
     }//GEN-LAST:event__taskTitleFieldFocusGained
 
@@ -348,7 +363,6 @@ public class TaskBox extends javax.swing.JPanel  implements ListBox{
             if(_mouseEntered==true){
                 _mouseEntered = false;
                 doSubmit();//隐藏浮动菜单之前先提交更改；
-                pop.hide();
             }
         }
         if(p2.x-p1.x>3&&
@@ -405,7 +419,6 @@ public class TaskBox extends javax.swing.JPanel  implements ListBox{
      * @return 
      */
     public Date getInputDueDate(){
-        System.out.println("this function is uncompleted!");
         Date date = new Date();
         String buffer = new String();
         buffer += this.yearComboBox.getSelectedItem();

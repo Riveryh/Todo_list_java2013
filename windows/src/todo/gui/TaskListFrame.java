@@ -11,7 +11,7 @@ import java.util.Iterator;
 import javax.swing.DefaultListModel;
 import javax.swing.JTextField;
 import todo.task.model.Task;
-import todo.task.model.TaskList;
+import todo.task.model.TodoTaskList;
 import todo.gui.TaskBox;
 import todo.task.app.Todo;
 
@@ -21,8 +21,8 @@ import todo.task.app.Todo;
  */
 public class TaskListFrame extends javax.swing.JFrame {
     
-    private TaskList _todoList;
-    private TaskList _doneList;
+    private TodoTaskList _todoList;
+    private TodoTaskList _doneList;
 
     /**
      * 构造函数，接受TaskList参数并将其引用保存在类中,
@@ -33,7 +33,7 @@ public class TaskListFrame extends javax.swing.JFrame {
      */
     public TaskListFrame() {  
     }
-    public TaskListFrame(TaskList todoList,TaskList doneList){
+    public TaskListFrame(TodoTaskList todoList,TodoTaskList doneList){
         this();
         this.setUndecorated(true);
         _todoList = todoList;
@@ -54,9 +54,10 @@ public class TaskListFrame extends javax.swing.JFrame {
 
         commandText = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        submitButton = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
         jToggleButton1 = new javax.swing.JToggleButton();
+        submitButton = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         todoListPane = new javax.swing.JScrollPane();
         taskListPanel2 = new todo.gui.TaskListPanel(this._todoList);
@@ -90,15 +91,16 @@ public class TaskListFrame extends javax.swing.JFrame {
         setBounds(new java.awt.Rectangle(640, 480, 300, 400));
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setUndecorated(true);
+        setPreferredSize(new java.awt.Dimension(TaskBox._WIDTH+19,TaskBox._HEIGHT*10+50));
         setResizable(false);
 
-        jButton2.setBackground(new java.awt.Color(255, 0, 51));
-        jButton2.setText("X");
-        jButton2.setBorder(null);
-        jButton2.setPreferredSize(new java.awt.Dimension(15, 15));
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(233, 233, 233), 2));
+        jPanel2.setPreferredSize(new java.awt.Dimension(TaskBox._WIDTH+19,TaskBox._HEIGHT*10+50));
+
+        jToggleButton1.setText("Done/Todo");
+        jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                jToggleButton1ActionPerformed(evt);
             }
         });
 
@@ -110,18 +112,22 @@ public class TaskListFrame extends javax.swing.JFrame {
             }
         });
 
-        jToggleButton1.setText("Done/Undo");
-        jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
+        jButton2.setBackground(new java.awt.Color(255, 0, 51));
+        jButton2.setText("X");
+        jButton2.setBorder(null);
+        jButton2.setPreferredSize(new java.awt.Dimension(25, 25));
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jToggleButton1ActionPerformed(evt);
+                jButton2ActionPerformed(evt);
             }
         });
 
+        jPanel1.setPreferredSize(new java.awt.Dimension(TaskBox._WIDTH+19,TaskBox._HEIGHT*10));
         jPanel1.setLayout(new java.awt.CardLayout());
 
         todoListPane.setBorder(null);
         todoListPane.setToolTipText("");
-        todoListPane.setPreferredSize(new java.awt.Dimension(300, 500));
+        todoListPane.setPreferredSize(new java.awt.Dimension(TaskBox._WIDTH,TaskBox._HEIGHT*10));
 
         taskListPanel2.setPreferredSize(new java.awt.Dimension(300, 80));
         todoListPane.setViewportView(taskListPanel2);
@@ -131,34 +137,50 @@ public class TaskListFrame extends javax.swing.JFrame {
         todoListPane.getAccessibleContext().setAccessibleName("Todo");
 
         doneListPane.setBorder(null);
+        doneListPane.setPreferredSize(new java.awt.Dimension(TaskBox._WIDTH,TaskBox._HEIGHT*10));
+
+        taskListPanel1.setPreferredSize(new java.awt.Dimension(295, 80));
         doneListPane.setViewportView(taskListPanel1);
 
         jPanel1.add(doneListPane, "card3");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(jToggleButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 78, Short.MAX_VALUE)
+                        .addComponent(submitButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(1, 1, 1)))
+                .addGap(1, 1, 1))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jToggleButton1)
+                    .addComponent(submitButton)
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 488, Short.MAX_VALUE)
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jToggleButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(submitButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 295, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(submitButton))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 511, Short.MAX_VALUE))
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 539, Short.MAX_VALUE)
         );
 
         pack();
@@ -180,9 +202,11 @@ public class TaskListFrame extends javax.swing.JFrame {
         this.taskListPanel2.addTask();
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        this.dispose();// 关闭当前窗口
-    }//GEN-LAST:event_jButton2ActionPerformed
+    private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
+        taskListPanel1.reLoad();
+        taskListPanel2.reLoad();
+        ((java.awt.CardLayout)this.jPanel1.getLayout()).next(jPanel1);
+    }//GEN-LAST:event_jToggleButton1ActionPerformed
 
     private void submitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitButtonActionPerformed
         String commands = this.commandText.getText();
@@ -190,9 +214,9 @@ public class TaskListFrame extends javax.swing.JFrame {
         this.invalidate();
     }//GEN-LAST:event_submitButtonActionPerformed
 
-    private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
-        ((java.awt.CardLayout)this.jPanel1.getLayout()).next(jPanel1);
-    }//GEN-LAST:event_jToggleButton1ActionPerformed
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        this.dispose();// 关闭当前窗口
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -237,6 +261,7 @@ public class TaskListFrame extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JButton submitButton;
     private todo.gui.TaskListPanel taskListPanel1;

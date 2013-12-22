@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import javax.swing.*;
 import static todo.task.app.Todo.fileName;
 import todo.task.model.TaskList;
+import todo.task.model.TodoTaskList;
 
 public class MainWindow{
         static Point origin = new Point();  //全局的位置变量，用于表示鼠标在窗口上的位置
@@ -19,23 +20,26 @@ public class MainWindow{
          * @throws IOException 
          */
 	public static void main(String[] args) throws ClassNotFoundException, IOException {
-		TaskList todoList;
-                TaskList doneList;
+		TodoTaskList todoList;
+                TodoTaskList doneList;
 		String todoListFileName = "TodoListFile.dat";
                 String doneListFileName = "DoneListFile.dat";
                 
 		try{
-			todoList = TaskList.open(new File(todoListFileName));
+			todoList = TodoTaskList.open(new File(todoListFileName));
 		}catch(IOException e1){
-			TaskList.save(new File(todoListFileName), new TaskList(todoListFileName));
-			todoList = TaskList.open(new File(todoListFileName));
+			TodoTaskList.save(new File(todoListFileName), new TodoTaskList(todoListFileName));
+			todoList = TodoTaskList.open(new File(todoListFileName));
 		}
                 try{
-			doneList = TaskList.open(new File(doneListFileName));
+			doneList = TodoTaskList.open(new File(doneListFileName));
 		}catch(IOException e1){
-			TaskList.save(new File(doneListFileName), new TaskList(doneListFileName));
-			doneList = TaskList.open(new File(doneListFileName));
+			TodoTaskList.save(new File(doneListFileName), new TodoTaskList(doneListFileName));
+			doneList = TodoTaskList.open(new File(doneListFileName));
 		}
+                
+                TaskList.todoList = todoList;
+                TaskList.doneList = doneList;
                 
                 //设置界面样式为windows默认界面    
                 try {

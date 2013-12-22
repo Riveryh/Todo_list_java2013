@@ -27,9 +27,9 @@ public class AddTaskBox extends javax.swing.JPanel{
     public AddTaskBox(TaskListPanel parent,int lastOrder){
         this._parent = parent;
         this._lastOrder = lastOrder;
-        this.setBackground(new java.awt.Color(250,250,250));
-        this.setPreferredSize(new java.awt.Dimension(TaskBox._WIDTH,TaskBox._HEIGHT));       
+        this.setBackground(new java.awt.Color(250,250,250)); 
         initComponents();       
+        this.setPreferredSize(new java.awt.Dimension(TaskBox._WIDTH,TaskBox._HEIGHT/3*2));      
     }
     
 
@@ -43,20 +43,21 @@ public class AddTaskBox extends javax.swing.JPanel{
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(40, 40), new java.awt.Dimension(0, 0));
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(TaskBox._HEIGHT,TaskBox._HEIGHT/3*2), new java.awt.Dimension(0, 0));
         jTextField1 = new javax.swing.JTextField();
 
+        setPreferredSize(new java.awt.Dimension(TaskBox._WIDTH,30));
         java.awt.FlowLayout flowLayout1 = new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0);
         flowLayout1.setAlignOnBaseline(true);
         setLayout(flowLayout1);
         add(filler1);
 
-        jTextField1.setFont(new java.awt.Font("Microsoft YaHei UI Light", 0, 22)); // NOI18N
+        jTextField1.setFont(new java.awt.Font("Microsoft YaHei UI Light", 0, TaskBox._HEIGHT/5*2));
         jTextField1.setForeground(new java.awt.Color(204, 204, 204));
         jTextField1.setText("点击以添加");
         jTextField1.setToolTipText("");
         jTextField1.setBorder(null);
-        jTextField1.setPreferredSize(new java.awt.Dimension(205, 30));
+        jTextField1.setPreferredSize(new java.awt.Dimension(TaskBox._HEIGHT*5,TaskBox._HEIGHT/3*2));
         jTextField1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField1ActionPerformed(evt);

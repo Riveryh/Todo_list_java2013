@@ -16,6 +16,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import todo.task.model.Task;
 import todo.task.model.TaskList;
+import todo.task.model.TodoTaskList;
 
 /**
  *
@@ -24,7 +25,7 @@ import todo.task.model.TaskList;
 public class TaskListPanel extends javax.swing.JPanel implements 
             todo.task.util.TaskListListener{
     
-    private TaskList _list;
+    private TodoTaskList _list;
     private int _taskBoxCount=0;
     private int _vgap=2;    //表示两个taskBox之间的间距；
     private int _zOrder;
@@ -45,7 +46,7 @@ public class TaskListPanel extends javax.swing.JPanel implements
         initComponents();
         _taskBoxes = new LinkedList<Component>();
     }
-    public TaskListPanel(TaskList list){
+    public TaskListPanel(TodoTaskList list){
         this();
         this._list=list;
         this.reLoad();
@@ -54,6 +55,8 @@ public class TaskListPanel extends javax.swing.JPanel implements
     public void reLoad(){
         Task __task;
         ListBox __box;
+        this.removeAll();
+        this._taskBoxes = new LinkedList<Component>();
         Iterator<Task> _iterator = _list.iterator();
         while(_iterator.hasNext()){
             __box = (ListBox) this.add(__task=_iterator.next());
@@ -182,7 +185,10 @@ public class TaskListPanel extends javax.swing.JPanel implements
                     if(temp.getDueDate().getDate()==temp2.getDueDate().getDate()){
                         //如果是同一天，则不加入分割线.
                     }else{
-                        this.add(new AddTaskBox(this,temp2.getOrder()));
+                        //如果此panel显示的列表是未完成列表，那么要加入新建Box.
+                        if(this._list == TaskList.todoList){
+                            this.add(new AddTaskBox(this,temp2.getOrder()));
+                        }
                         this.add(new TaskSpliterBox(temp.getDueDate()));
                     }           
                 }else{      //如果是第一天，那么必须加入第一天的时间标签
@@ -191,12 +197,13 @@ public class TaskListPanel extends javax.swing.JPanel implements
                 temp2 = temp;
                 this.add(temp);
             }
-            if(temp2!=null){
-                this.add(new AddTaskBox(this,temp2.getOrder()));
-            }else{
-                this.add(new AddTaskBox(this,-1));
-            }
-            
+            if(this._list == TaskList.todoList){
+                if(temp2!=null){
+                    this.add(new AddTaskBox(this,temp2.getOrder()));
+                }else{
+                    this.add(new AddTaskBox(this,-1));
+                }
+            }  
         }
         super.updateUI(); 
     }
@@ -209,7 +216,7 @@ public class TaskListPanel extends javax.swing.JPanel implements
      * 获得此TaskListPanel所对应的TaskList.
      * @return 
      */
-    public TaskList getTaskList(){
+    public TodoTaskList getTaskList(){
         return _list;
     }
     
@@ -274,7 +281,7 @@ public class TaskListPanel extends javax.swing.JPanel implements
         return index;
     }
     
-    public TaskList getList(){
+    public TodoTaskList getList(){
         return this._list;
     }
     
@@ -292,6 +299,7 @@ public class TaskListPanel extends javax.swing.JPanel implements
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        setToolTipText("");
         setMaximumSize(new java.awt.Dimension(_WIDTH,_HEIGHT*_taskBoxCount+_vgap*_taskBoxCount));
         setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, _vgap));
     }// </editor-fold>//GEN-END:initComponents

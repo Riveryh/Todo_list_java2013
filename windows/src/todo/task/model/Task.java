@@ -18,7 +18,7 @@ public class Task implements Serializable{
 	private String __title;
 	private String __discription;
 	private boolean __isCompleted;
-        private TaskList __parent;
+        private TodoTaskList __parent;
         private int __order;
 	
 	
@@ -33,17 +33,17 @@ public class Task implements Serializable{
 		this.__isCompleted	 = false;
 		this.__discription	 = null;
 	}
-	public Task(String title,TaskList list) {
+	public Task(String title,TodoTaskList list) {
 		this();
                 this.__parent = list;
 		this.__title = title;
                 this.__order = list.size()+1;
 	}
-	public Task( String title,Date dueDate,TaskList list) {
+	public Task( String title,Date dueDate,TodoTaskList list) {
 		this(title,list);
 		this.__dueDate = dueDate;
 	}
-	public Task(String title, Date dueDate, String discription,TaskList list) {
+	public Task(String title, Date dueDate, String discription,TodoTaskList list) {
 		this(title,dueDate,list);
 		this.__discription = discription;
 	}
@@ -104,19 +104,19 @@ public class Task implements Serializable{
 	}
         public void setCompleted(){
             this.__isCompleted = true;
-            __parent.remove(this);
+            __parent.remove(this.__order);
+            __parent = (TodoTaskList)TaskList.doneList;
             this.__order = 0;
-            __parent = __parent.getAnotherList();
             __parent.add(this);
         }
         public void setUncompleted(){
             this.__isCompleted = false;
-            __parent.remove(this);
+            __parent.remove(this.__order);
+            __parent = (TodoTaskList)TaskList.todoList;
             this.__order = 0;
-            __parent = __parent.getAnotherList();
             __parent.add(this);
         }
-        public TaskList getBelongTo(){
+        public TodoTaskList getBelongTo(){
                 return __parent;
         }
         public int getOrder(){
