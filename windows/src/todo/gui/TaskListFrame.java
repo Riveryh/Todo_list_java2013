@@ -9,9 +9,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Iterator;
 import javax.swing.DefaultListModel;
+import javax.swing.JTextField;
 import todo.task.model.Task;
 import todo.task.model.TaskList;
 import todo.gui.TaskBox;
+import todo.task.app.Todo;
 
 /**
  *
@@ -32,29 +34,11 @@ public class TaskListFrame extends javax.swing.JFrame {
     }
     public TaskListFrame(TaskList list){
         this();
+        this.setUndecorated(true);
         _list = list;
-        initComponents();    
-        Iterator<Task> _iterator = _list.iterator();
-        while(_iterator.hasNext()){
-            this.myTableModel.add(_iterator.next());
-        }
-        /*
-        myTaskTable.addMouseListener(new MouseAdapter(){
-            public void mouseClicked(MouseEvent e) {
-                int index = myTaskTable.locationToIndex(e.getPoint());
-                TaskBox thisBox = ((TaskBox)myTaskTable.getModel().getElementAt(index));
-                thisBox.getCheckBox().setSelected(!thisBox.getCheckBox().isSelected());
-                myTaskTable.updateUI();
-            }
-            public void mouseMoved(MouseEvent e){
-                int index = myTaskList.locationToIndex(e.getPoint());
-                myTaskList.setSelectedIndex(index);
-            }
-        });*/
-        
-        
-        
-        
+        this.add(new JTextField());
+        Iterator<Task> _iterator = _list.iterator();      
+        initComponents();
     }
     
 
@@ -67,34 +51,111 @@ public class TaskListFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        myTaskTable = new todo.gui.MyTaskTable();
+        commandText = new javax.swing.JTextField();
+        submitButton = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        taskListPanel2 = new todo.gui.TaskListPanel(this._list);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setAlwaysOnTop(true);
         setBackground(new java.awt.Color(255, 255, 255));
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        setResizable(false);
 
-        myTaskTable.setDefaultRenderer(myTaskTable.getColumnClass(0), new TaskBox());
-        myTaskTable.setDefaultEditor(myTaskTable.getColumnClass(0), new TaskBox());
-        myTableModel = myTaskTable.getTableModel();
-        jScrollPane1.setViewportView(myTaskTable);
+        commandText.setText("Input Commands");
+        commandText.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                commandTextMouseClicked(evt);
+            }
+        });
+        commandText.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                commandTextKeyPressed(evt);
+            }
+        });
+
+        submitButton.setText("submit");
+        submitButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                submitButtonMouseClicked(evt);
+            }
+        });
+
+        jButton1.setText("Add");
+        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton1MouseClicked(evt);
+            }
+        });
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jScrollPane2.setToolTipText("");
+
+        taskListPanel2.setPreferredSize(taskListPanel2.getPreferredSize());
+        jScrollPane2.setViewportView(taskListPanel2);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButton1)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(commandText, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addComponent(submitButton))))
+                .addGap(0, 5, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 468, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(submitButton)
+                    .addComponent(commandText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void submitButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_submitButtonMouseClicked
+        // TODO add your handling code here:
+        String commands = this.commandText.getText();
+        Todo.commandMode(commands, _list);
+        this.invalidate();
+    }//GEN-LAST:event_submitButtonMouseClicked
+
+    private void commandTextMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_commandTextMouseClicked
+        // TODO add your handling code here:
+        commandText.selectAll();
+    }//GEN-LAST:event_commandTextMouseClicked
+
+    private void commandTextKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_commandTextKeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyCode()==java.awt.event.KeyEvent.VK_ENTER){
+            submitButton.doClick();
+        }
+    }//GEN-LAST:event_commandTextKeyPressed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+        this.taskListPanel2.addTask();
+    }//GEN-LAST:event_jButton1MouseClicked
 
     /**
      * @param args the command line arguments
@@ -134,8 +195,10 @@ public class TaskListFrame extends javax.swing.JFrame {
    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JScrollPane jScrollPane1;
-    private todo.gui.MyTableModel myTableModel;
-    private todo.gui.MyTaskTable myTaskTable;
+    private javax.swing.JTextField commandText;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JButton submitButton;
+    private todo.gui.TaskListPanel taskListPanel2;
     // End of variables declaration//GEN-END:variables
 }
