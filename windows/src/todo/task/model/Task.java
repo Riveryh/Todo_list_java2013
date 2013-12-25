@@ -3,14 +3,15 @@ package todo.task.model;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import todo.task.util.HttpRequest;
 
 public class Task implements Serializable{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	static private int __taskCounter=0;
+	private int __taskId;
+	private static int __taskCounter=0;
 	private int __serialNumber;
 	private Date __startDate;
 	private Date __dueDate;
@@ -32,6 +33,7 @@ public class Task implements Serializable{
 		this.__startDate       = new Date();
 		this.__isCompleted	 = false;
 		this.__discription	 = null;
+                this.__taskId = 0;
 	}
 	public Task(String title,TodoTaskList list) {
 		this();
@@ -127,4 +129,54 @@ public class Task implements Serializable{
                 this.__order = order;
         }
 	
+        /**
+         * 在service端创建task
+         * 
+         * @author wanghaojie<haojie0429@126.com>
+         * @since 2013-12-25
+         */
+        public void httpCreate() {
+            if(this.__taskId != 0) {
+                return;
+            }
+            String param = "title=" + this.__title + 
+                            "&description=" + this.__discription + 
+                            "&status=" + (this.__isCompleted ? 1 : 0) + 
+                            "&uid=" + Task.serialVersionUID;
+            String sr = HttpRequest.sendPost("http://localhost:8080/task/create", param);
+            int taskId = Integer.parseInt(sr);
+            this.__taskId = taskId;
+        }
+        
+        /**
+         * 在service端修改task
+         * 
+         * @author wanghaojie<haojie0429@126.com>
+         * @since 2013-12-25
+         */
+        public void httpSet() {
+            if(this.__taskId == 0) {
+                this.httpCreate();
+            }
+            String param = "tid=" + this.__taskId +
+                            "&title=" + this.__title + 
+                            "&description=" + this.__discription + 
+                            "&status=" + (this.__isCompleted ? 1 : 0) + 
+                            "&uid=" + Task.serialVersionUID;
+            String sr = HttpRequest.sendPost("http://localhost:8080/task/set", param);
+        }
+        
+        /**
+         * 在service端删除task
+         * 
+         * @author wanghaojie<haojie0429@126.com>
+         * @since 2013-12-25
+         */
+        public void httpRemove() {
+            if(this.__taskId == 0) {
+                return;
+            }
+            String param = "tid=" + this.__taskId;
+            String sr = HttpRequest.sendPost("http://localhost:8080/task/remove", param);
+        }
 }

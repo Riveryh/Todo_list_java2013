@@ -12,13 +12,19 @@ import java.util.ArrayList;
  * To change this template use File | Settings | File Templates.
  */
 public class TaskService extends Common {
+
+    /**
+     * 创建task
+     *
+     * @author wanghaojie<haojie0429@126.com>
+     * @since 2013-12-05
+     */
     public Task createTask(Task task) {
         connectDB();
         try {
             String sql = "INSERT INTO task(title, description, status, uid, dtime, ctime, utime) " +
                     "VALUES('" + task.getTitle() + "','" + task.getDescription() + "','" + task.getStatus() +
-                    "','" + task.getUid() + "','" + task.getDtime() +
-                    "','2011-11-11 00:00:00','2011-11-11 00:00:00')";
+                    "','" + task.getUid() + "','2011-11-11 00:00:00','2011-11-11 00:00:00','2011-11-11 00:00:00')";
             stmt.executeUpdate(sql);
             rs = stmt.executeQuery("SELECT LAST_INSERT_ID() AS tid");
             task.setTid(rs.getInt("tid"));
@@ -29,6 +35,12 @@ public class TaskService extends Common {
         return task;
     }
 
+    /**
+     * 设置task
+     *
+     * @author wanghaojie<haojie0429@126.com>
+     * @since 2013-12-07
+     */
     public Task setTask(Task task) {
         connectDB();
         try {
@@ -45,6 +57,29 @@ public class TaskService extends Common {
         return task;
     }
 
+    /**
+     * 删除task
+     *
+     * @author wanghaojie<haojie0429@126.com>
+     * @since 2013-12-15
+     */
+    public void removeTask(Task task) {
+        connectDB();
+        try {
+            String sql = "DELETE FROM task WHERE tid=" + task.getTid();
+            stmt.executeUpdate(sql);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        closeDB();
+    }
+
+    /**
+     * 获取task列表
+     *
+     * @author wanghaojie<haojie0429@126.com>
+     * @since 2013-12-17
+     */
     public ArrayList<Task> getTaskList(int uid) {
         ArrayList<Task> list = new ArrayList<Task>();
         connectDB();

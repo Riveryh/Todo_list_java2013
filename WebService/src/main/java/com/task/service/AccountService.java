@@ -5,6 +5,9 @@ import org.springframework.stereotype.Service;
 import java.sql.*;
 import sun.jdbc.odbc.JdbcOdbcDriver;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.task.entity.*;
 
 /**
@@ -17,9 +20,20 @@ import com.task.entity.*;
 
 @Service
 public class AccountService extends Common{
-    public User login(String email, String password) {
+
+    /**
+     * 登录验证
+     *
+     * @param String email
+     * @param String password
+     * @return Map<String, Object>
+     * @author wanghaojie<haojie0429@126.com>
+     * @since 2013-11-29
+     */
+    public Map<String, Object> login(String email, String password) {
         this.connectDB();
         User user = null;
+        int errcode = 104;
         try {
             String sql = "SELECT * FROM user WHERE email='" + email + "'" +
                         "AND password='" + sha1(password) + "'";
@@ -30,14 +44,26 @@ public class AccountService extends Common{
                 user.setUid(rs.getInt("uid"));
                 user.setUtime(rs.getString("utime"));
                 user.setCtime(rs.getString("ctime"));
+                errcode = 100;
             }
         } catch(Exception e) {
             System.out.println(e.getMessage());
         }
         closeDB();
-        return user;
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("errcode", errcode);
+        map.put("user", user);
+        return map;
     }
 
+    /**
+     * 注册
+     *
+     * @param User user
+     * @return Map<String, Object>
+     * @author wanghaojie<haojie0429@126.com>
+     * @since 2013-11-29
+     */
     public int register(User user)
     {
         this.connectDB();
@@ -55,5 +81,4 @@ public class AccountService extends Common{
         closeDB();
         return uid;
     }
-
 }
