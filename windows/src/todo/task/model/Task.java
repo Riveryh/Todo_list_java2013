@@ -21,6 +21,7 @@ public class Task implements Serializable{
 	private boolean __isCompleted;
         private TodoTaskList __parent;
         private int __order;
+        private boolean __isDelete;
 	
 	
 	
@@ -136,7 +137,7 @@ public class Task implements Serializable{
          * @since 2013-12-25
          */
         public void httpCreate() {
-            if(this.__taskId != 0) {
+            if(this.__taskId != 0 || this.__isDelete) {
                 return;
             }
             String param = "title=" + this.__title + 
@@ -157,6 +158,10 @@ public class Task implements Serializable{
         public void httpSet() {
             if(this.__taskId == 0) {
                 this.httpCreate();
+            }
+            if(this.__isDelete) {
+                this.httpRemove();
+                return;
             }
             String param = "tid=" + this.__taskId +
                             "&title=" + this.__title + 
