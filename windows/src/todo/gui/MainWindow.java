@@ -19,7 +19,8 @@ public class MainWindow{
          * @throws ClassNotFoundException
          * @throws IOException 
          */
-	public static void main(String[] args) throws ClassNotFoundException, IOException {
+	public static void mainWindow() throws ClassNotFoundException, IOException {
+            
 		TodoTaskList todoList;
                 TodoTaskList doneList;
 		String todoListFileName = "TodoListFile.dat";
@@ -83,5 +84,12 @@ public class MainWindow{
 		System.out.println("exit");
 	
 	}
-
+        
+        public static void main(String[] args) {
+            LoginWindow frame = new LoginWindow();
+            frame.setVisible(true);
+            frame.setTitle("TODO");
+            frame.pack();
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        }
 }

@@ -3,6 +3,7 @@ package todo.task.model;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import todo.task.app.Common;
 import todo.task.util.HttpRequest;
 
 public class Task implements Serializable{
@@ -144,7 +145,7 @@ public class Task implements Serializable{
                             "&description=" + this.__discription + 
                             "&status=" + (this.__isCompleted ? 1 : 0) + 
                             "&uid=" + Task.serialVersionUID;
-            String sr = HttpRequest.sendPost("http://localhost:8080/task/create", param);
+            String sr = HttpRequest.sendPost(Common.home + "/task/create", param);
             int taskId = Integer.parseInt(sr);
             this.__taskId = taskId;
         }
@@ -168,7 +169,7 @@ public class Task implements Serializable{
                             "&description=" + this.__discription + 
                             "&status=" + (this.__isCompleted ? 1 : 0) + 
                             "&uid=" + Task.serialVersionUID;
-            String sr = HttpRequest.sendPost("http://localhost:8080/task/set", param);
+            String sr = HttpRequest.sendPost(Common.home + "/task/set", param);
         }
         
         /**
@@ -182,6 +183,6 @@ public class Task implements Serializable{
                 return;
             }
             String param = "tid=" + this.__taskId;
-            String sr = HttpRequest.sendPost("http://localhost:8080/task/remove", param);
+            String sr = HttpRequest.sendPost(Common.home + "/task/remove", param);
         }
 }
