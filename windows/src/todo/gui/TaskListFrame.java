@@ -5,15 +5,9 @@
  */
 package todo.gui;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.Iterator;
-import javax.swing.DefaultListModel;
-import javax.swing.JTextField;
-import todo.task.model.Task;
-import todo.task.model.TodoTaskList;
-import todo.gui.TaskBox;
 import todo.task.app.Todo;
+import todo.task.model.TodoTaskList;
+import todo.task.util.TaskAlarm;
 
 /**
  *
@@ -23,6 +17,8 @@ public class TaskListFrame extends javax.swing.JFrame {
     
     private TodoTaskList _todoList;
     private TodoTaskList _doneList;
+    private todo.task.util.TaskAlarm _taskAlarm;
+    
 
     /**
      * 构造函数，接受TaskList参数并将其引用保存在类中,
@@ -36,10 +32,23 @@ public class TaskListFrame extends javax.swing.JFrame {
     public TaskListFrame(TodoTaskList todoList,TodoTaskList doneList){
         this();
         this.setUndecorated(true);
+        
+        //启动闹钟
+        _taskAlarm = new todo.task.util.TaskAlarm();
+        _taskAlarm.start();
+        TaskAlarm.globalAlarm =_taskAlarm;
+        
         _todoList = todoList;
         _doneList = doneList;
         _todoList.updateDueDate();//刷新所有过期任务的时间到今天.
         initComponents();
+    }
+    
+
+    @Override
+    public void dispose() {
+        super.dispose(); 
+       _taskAlarm.setStopped(); //退出时关闭闹钟
     }
     
 

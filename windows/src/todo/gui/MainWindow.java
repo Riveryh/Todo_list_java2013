@@ -80,8 +80,8 @@ public class MainWindow{
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 
                 
-		System.out.println("exit");
-	
+                
+                System.out.println("Main Thread exited.");
 	}
 
 }

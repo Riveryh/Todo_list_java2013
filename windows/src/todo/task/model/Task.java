@@ -18,6 +18,7 @@ public class Task implements Serializable{
 	private Date __establishedDate;
 	private String __title;
 	private String __discription;
+        private String __type;
 	private boolean __isCompleted;
         private TodoTaskList __parent;
         private int __order;
@@ -33,7 +34,7 @@ public class Task implements Serializable{
 		this.__dueDate         = new Date();
 		this.__startDate       = new Date();
 		this.__isCompleted	 = false;
-		this.__discription	 = null;
+		this.__discription	 = null;             
                 this.__taskId = 0;
 	}
 	public Task(String title,TodoTaskList list) {
@@ -128,6 +129,14 @@ public class Task implements Serializable{
         public void setOrder(int order){
                 //__parent.onTaskChanged(this);
                 this.__order = order;
+        }
+        
+        public String getType(){
+            return __type;
+        }
+        public void setType(String type){
+            this.__type = type;
+            __parent.onTaskChanged(this);
         }
 	
         /**

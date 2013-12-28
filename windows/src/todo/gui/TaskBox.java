@@ -5,9 +5,11 @@
  */
 package todo.gui;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
@@ -18,7 +20,13 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultCellEditor;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import javax.swing.Popup;
+import javax.swing.WindowConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import todo.task.model.Task;
@@ -29,7 +37,7 @@ import todo.task.model.Task;
  */
 public class TaskBox extends javax.swing.JPanel  implements ListBox{
     private Task _task;
-    private TaskBox _thisBox = this;
+    private final TaskBox _thisBox = this;
     private DefaultCellEditor _dCE;
     private TaskListPanel _parent;
     private boolean _isExtended=false;
@@ -43,6 +51,7 @@ public class TaskBox extends javax.swing.JPanel  implements ListBox{
     static int _POPUP_HEIGHT = 150;
     
     private static Popup pop;   //同一时间只允许一个pop存在。
+    private static javax.swing.JFrame popFrame;
     
     /**
      * 含参数构造方法，接受一个Task对象，将它的引用保存在TaskBox对象内部，
@@ -195,9 +204,11 @@ public class TaskBox extends javax.swing.JPanel  implements ListBox{
         jLabel5 = new javax.swing.JLabel();
         discriptionTextField = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(32767, 0));
+        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(32767, 0));
         jComboBox1 = new javax.swing.JComboBox();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(77, 0), new java.awt.Dimension(32767, 0));
+        jLabel6 = new javax.swing.JLabel();
+        jToggleButton1 = new javax.swing.JToggleButton();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(32767, 0));
         submitButton = new javax.swing.JButton();
         basicPanel = new javax.swing.JPanel();
         _checkBox = new javax.swing.JCheckBox();
@@ -207,7 +218,7 @@ public class TaskBox extends javax.swing.JPanel  implements ListBox{
         popupPanel.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 153, 204), 1, true));
         popupPanel.setFocusTraversalPolicyProvider(true);
         popupPanel.setFont(new java.awt.Font("STXihei", 0, 15)); // NOI18N
-        popupPanel.setPreferredSize(new Dimension(280,_POPUP_HEIGHT));
+        popupPanel.setPreferredSize(new Dimension(280,_POPUP_HEIGHT*2));
         popupPanel.setRequestFocusEnabled(false);
         popupPanel.setVerifyInputWhenFocusTarget(false);
         popupPanel.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
@@ -243,9 +254,13 @@ public class TaskBox extends javax.swing.JPanel  implements ListBox{
         jLabel5.setText("备注：");
         popupPanel.add(jLabel5);
 
-        discriptionTextField.setEditable(false);
         discriptionTextField.setText("无备注");
         discriptionTextField.setPreferredSize(new java.awt.Dimension(215, 30));
+        discriptionTextField.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                discriptionTextFieldMouseClicked(evt);
+            }
+        });
         popupPanel.add(discriptionTextField);
 
         jLabel1.setText("分类");
@@ -254,9 +269,20 @@ public class TaskBox extends javax.swing.JPanel  implements ListBox{
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "学习", "工作", "生活", "其他" }));
         popupPanel.add(jComboBox1);
+
+        jLabel6.setText("提醒");
+        popupPanel.add(jLabel6);
+
+        jToggleButton1.setText("否");
+        jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jToggleButton1ActionPerformed(evt);
+            }
+        });
+        popupPanel.add(jToggleButton1);
         popupPanel.add(filler1);
 
-        submitButton.setText("do");
+        submitButton.setText("收起");
         submitButton.setActionCommand("Y");
         submitButton.setPreferredSize(new java.awt.Dimension(64, 30));
         submitButton.addActionListener(new java.awt.event.ActionListener() {
@@ -347,6 +373,14 @@ public class TaskBox extends javax.swing.JPanel  implements ListBox{
         }
         pop = _popupFactory.getPopup(_parent,popupPanel, __point.x-290,__point.y);
         pop.show();
+        /*
+        popFrame = new JFrame();
+        popFrame.setUndecorated(true);
+        popFrame.setLocation(__point.x-290,__point.y);
+        popFrame.getContentPane().add(this.popupPanel);
+        popFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        popFrame.setVisible(true);
+        */
     }//GEN-LAST:event__taskTitleFieldFocusGained
 
     private void _taskTitleFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event__taskTitleFieldFocusLost
@@ -381,6 +415,23 @@ public class TaskBox extends javax.swing.JPanel  implements ListBox{
         doSubmit();
     }//GEN-LAST:event_submitButtonActionPerformed
 
+    private void discriptionTextFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_discriptionTextFieldMouseClicked
+        String information = JOptionPane.showInputDialog("请输入备注", this.discriptionTextField.getText());
+        this.discriptionTextField.setText(information);
+    }//GEN-LAST:event_discriptionTextFieldMouseClicked
+
+    private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
+        JDialog __dialog = new JDialog();
+        DateChooser dateChooser1 = DateChooser.getInstance("yyyy-MM-dd");
+	JTextField showDate1 = new JTextField("单击选择日期");
+        dateChooser1.register(showDate1);
+        __dialog.add(showDate1, BorderLayout.NORTH);
+        __dialog.pack();
+        __dialog.setLocationRelativeTo(null);
+        __dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        __dialog.setVisible(true);
+    }//GEN-LAST:event_jToggleButton1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox _checkBox;
     private javax.swing.JTextField _taskTitleField;
@@ -396,6 +447,8 @@ public class TaskBox extends javax.swing.JPanel  implements ListBox{
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JComboBox monthComboBox;
     private javax.swing.JPanel popupPanel;
     private javax.swing.JButton submitButton;
@@ -409,7 +462,8 @@ public class TaskBox extends javax.swing.JPanel  implements ListBox{
 
     private void doSubmit() {
         this._task.setDueDate(getInputDueDate());
-        this._task.setDiscription(getInputDiscription());     
+        this._task.setDiscription(getInputDiscription());
+        this._task.setType(jComboBox1.getSelectedItem().toString());
         pop.hide();
         _parent.updateUI();
     }

@@ -195,6 +195,11 @@ public class TodoTaskList extends TaskList {
         oos.writeObject(this);
         oos.close();
     }
+    
+    //以后的版本将文件保存和读取方式定义为xml文件。
+    public void save2(File file) throws IOException {
+        //TODO: to add.
+    }
 
     public void save() throws IOException {
         if (__file != null) {
