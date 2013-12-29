@@ -5,6 +5,7 @@
  */
 package todo.task.model;
 
+import java.io.File;
 import java.util.Iterator;
 
 /**
@@ -25,6 +26,10 @@ public class DeletedTaskList extends TaskList{
                 Task.httpRemoveTask(_task.getTaskId());
                 it.remove();
         }
+    }
+    
+    public DeletedTaskList(String filePath) {
+        __file = new File(filePath);
     }
     
 }

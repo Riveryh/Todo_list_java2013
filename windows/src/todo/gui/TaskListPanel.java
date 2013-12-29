@@ -248,6 +248,7 @@ public class TaskListPanel extends javax.swing.JPanel implements
      */
     @Override
     public void onTaskListChanged(){
+        this._list.httpSync();
         this.updateUI();
     }
     

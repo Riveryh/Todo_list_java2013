@@ -58,7 +58,7 @@ public class MainWindow{
 			deletedList = (DeletedTaskList) TaskList.open(new File(deletedListFileName));
 		}catch(IOException e1){
                         try {
-                            TaskList.save(new File(deletedListFileName), new TodoTaskList(deletedListFileName));
+                            TaskList.save(new File(deletedListFileName), new DeletedTaskList(deletedListFileName));
                             deletedList = (DeletedTaskList) TaskList.open(new File(deletedListFileName));
                         } catch(Exception e) {
                             
