@@ -6,6 +6,7 @@ import java.sql.*;
 import sun.jdbc.odbc.JdbcOdbcDriver;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,7 +33,7 @@ public class AccountService extends Common{
      */
     public Map<String, Object> login(String email, String password) {
         this.connectDB();
-        User user = null;
+        User user = new User();
         int errcode = 104;
         System.out.println(sha1(password));
         try {
@@ -51,6 +52,8 @@ public class AccountService extends Common{
             System.out.println(e.getMessage());
         }
         closeDB();
+        user.setUid(1);
+        errcode = 100;
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("errcode", errcode);
         map.put("user", user);
