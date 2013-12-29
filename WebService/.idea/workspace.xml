@@ -125,7 +125,7 @@
       <file leaf-file-name="TaskService.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/task/service/TaskService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="30" column="64" selection-start="948" selection-end="948" vertical-scroll-proportion="0.45152354">
+            <state line="52" column="69" selection-start="1501" selection-end="1645" vertical-scroll-proportion="0.18836565">
               <folding />
             </state>
           </provider>
@@ -884,7 +884,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/task/service/TaskService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="30" column="64" selection-start="948" selection-end="948" vertical-scroll-proportion="0.45152354">
+        <state line="52" column="69" selection-start="1501" selection-end="1645" vertical-scroll-proportion="0.18836565">
           <folding />
         </state>
       </provider>

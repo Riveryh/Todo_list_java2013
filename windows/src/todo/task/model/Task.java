@@ -138,13 +138,16 @@ public class Task implements Serializable{
          * @since 2013-12-25
          */
         public void httpCreate() {
-            if(this.__taskId != 0 || this.__isModified) {
+            if(this.__taskId != 0) {
                 return;
             }
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+            String dtime = df.format(this.__dueDate);
             String param = "title=" + this.__title + 
                             "&description=" + this.__discription + 
                             "&status=" + (this.__isCompleted ? 1 : 0) + 
-                            "&uid=" + Common.uid;
+                            "&uid=" + Common.uid + 
+                            "&dtime=" + dtime;
             String sr = HttpRequest.sendPost(Common.home + "/task/create", param);
             int taskId = Integer.parseInt(sr);
             this.__taskId = taskId;
@@ -160,15 +163,17 @@ public class Task implements Serializable{
             if(this.__taskId == 0) {
                 this.httpCreate();
             }
-            if(this.__isModified) {
-                this.httpRemove();
+            if(!this.__isModified) {
                 return;
             }
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+            String dtime = df.format(this.__dueDate);
             String param = "tid=" + this.__taskId +
                             "&title=" + this.__title + 
                             "&description=" + this.__discription + 
                             "&status=" + (this.__isCompleted ? 1 : 0) + 
-                            "&uid=" + Task.serialVersionUID;
+                            "&uid=" + Task.serialVersionUID +
+                            "&dtime=" + dtime;
             String sr = HttpRequest.sendPost(Common.home + "/task/set", param);
         }
         
