@@ -42,7 +42,7 @@ public class TaskBox extends javax.swing.JPanel  implements ListBox{
      * 定义用户界面中一个任务盒子的高度，其他的界面元件尺寸以此为基准进行相对调整
      * @author huangyuhan
      */
-    static int _HEIGHT= 45;   //global scale reference!所有的尺度都以此为基准
+    static int _HEIGHT= 35;   //global scale reference!所有的尺度都以此为基准
     static int _WIDTH = 6*_HEIGHT;
     static int _POPUP_HEIGHT = 150;
     

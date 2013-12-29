@@ -126,15 +126,21 @@ public class LoginWindow extends javax.swing.JFrame {
         String password = new String(passwordInput.getPassword());
         String url = Common.home + "/account/login";
         String param = "email=" + email + "&password=" + password;
-        String result = HttpRequest.sendPost(url, param);
-        int uid = Integer.parseInt(result);
-        if(uid == 0) {
-            System.out.println(result);
-            loginStatusLabel.setText("登录失败");
-            loginStatusLabel.setVisible(true); 
-        } else {
+        try{
+            String result = HttpRequest.sendPost(url, param);
+            int uid = Integer.parseInt(result);
+            if(uid == 0) {
+                System.out.println(result);
+                loginStatusLabel.setText("登录失败");
+                loginStatusLabel.setVisible(true); 
+            } else {
+                MainWindow.mainWindow();
+                this.dispose();
+            }
+        }catch(Exception e){
+            //This is for debug!
             MainWindow.mainWindow();
-            this.setVisible(false);
+            this.dispose();
         }
     }//GEN-LAST:event_loginSubmit
 

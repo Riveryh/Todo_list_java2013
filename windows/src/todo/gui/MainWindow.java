@@ -121,6 +121,5 @@ public class MainWindow{
             frame.setTitle("TODO");
             frame.pack();
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            mainWindow();
         }
 }
