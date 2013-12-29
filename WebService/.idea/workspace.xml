@@ -9,10 +9,10 @@
     <file path="/User.java" changelist="07f66641-aae9-4709-af41-3fa5438a1863" time="1386554456494" ignored="false" />
     <file path="/MainController.java" changelist="07f66641-aae9-4709-af41-3fa5438a1863" time="1385862107862" ignored="false" />
     <file path="/hello.jsp" changelist="07f66641-aae9-4709-af41-3fa5438a1863" time="1385862430623" ignored="false" />
-    <file path="/TaskController.java" changelist="07f66641-aae9-4709-af41-3fa5438a1863" time="1388299602420" ignored="false" />
-    <file path="/Task.java" changelist="07f66641-aae9-4709-af41-3fa5438a1863" time="1386554665683" ignored="false" />
-    <file path="/TaskService.java" changelist="07f66641-aae9-4709-af41-3fa5438a1863" time="1388298728861" ignored="false" />
-    <file path="/AccountService.java" changelist="07f66641-aae9-4709-af41-3fa5438a1863" time="1388302262670" ignored="false" />
+    <file path="/TaskController.java" changelist="07f66641-aae9-4709-af41-3fa5438a1863" time="1388305613823" ignored="false" />
+    <file path="/Task.java" changelist="07f66641-aae9-4709-af41-3fa5438a1863" time="1388305509001" ignored="false" />
+    <file path="/TaskService.java" changelist="07f66641-aae9-4709-af41-3fa5438a1863" time="1388304211169" ignored="false" />
+    <file path="/AccountService.java" changelist="07f66641-aae9-4709-af41-3fa5438a1863" time="1388304835807" ignored="false" />
     <file path="/Common.java" changelist="07f66641-aae9-4709-af41-3fa5438a1863" time="1386552390216" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -77,16 +77,16 @@
       <file leaf-file-name="TaskController.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/task/controller/TaskController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="56" column="32" selection-start="1807" selection-end="1807" vertical-scroll-proportion="0.0">
+            <state line="113" column="26" selection-start="3914" selection-end="3914" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AccountController.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="AccountController.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/task/controller/AccountController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="38" column="72" selection-start="1145" selection-end="1145" vertical-scroll-proportion="0.0">
+            <state line="39" column="41" selection-start="1189" selection-end="1196" vertical-scroll-proportion="0.26912183">
               <folding />
             </state>
           </provider>
@@ -101,12 +101,13 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AccountService.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="AccountService.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/task/service/AccountService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="53" column="51" selection-start="1468" selection-end="1468" vertical-scroll-proportion="0.6770538">
+            <state line="46" column="21" selection-start="1206" selection-end="1206" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#1490#1506#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -115,7 +116,7 @@
       <file leaf-file-name="Common.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/task/service/Common.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="35" column="50" selection-start="924" selection-end="924" vertical-scroll-proportion="0.0">
+            <state line="33" column="19" selection-start="847" selection-end="847" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -124,7 +125,7 @@
       <file leaf-file-name="TaskService.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/task/service/TaskService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="29" column="86" selection-start="861" selection-end="861" vertical-scroll-proportion="0.0">
+            <state line="89" column="26" selection-start="2668" selection-end="2683" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -133,8 +134,11 @@
       <file leaf-file-name="Task.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/task/entity/Task.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="9" column="13" selection-start="189" selection-end="189" vertical-scroll-proportion="0.0">
-              <folding />
+            <state line="114" column="30" selection-start="2126" selection-end="2126" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#1775#1791#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -190,13 +194,13 @@
         <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" />
         <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/mvc-dispatcher-servlet.xml" />
         <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/hello.jsp" />
-        <option value="$PROJECT_DIR$/src/main/java/com/task/entity/Task.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/task/entity/User.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/task/service/TaskService.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/task/controller/TaskController.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/task/controller/AccountController.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/task/service/Common.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/task/service/TaskService.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/task/service/AccountService.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/task/entity/Task.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/task/controller/TaskController.java" />
       </list>
     </option>
   </component>
@@ -401,10 +405,33 @@
     <property name="FullScreen" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
+    <property name="dynamic.classpath" value="false" />
     <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.searchVisible" value="true" />
   </component>
   <component name="RunManager" selected="Tomcat Server.Tomcat 5.x1">
+    <configuration default="false" name="AccountService" type="Application" factoryName="Application" temporary="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="com.task.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="MAIN_CLASS_NAME" value="com.task.service.AccountService" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="WebService" />
+      <envs />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method />
+    </configuration>
     <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
       <module name="" />
       <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m" />
@@ -583,10 +610,16 @@
         </option>
       </method>
     </configuration>
-    <list size="2">
+    <list size="3">
       <item index="0" class="java.lang.String" itemvalue="JUnit.AppTests" />
       <item index="1" class="java.lang.String" itemvalue="Tomcat Server.Tomcat 5.x1" />
+      <item index="2" class="java.lang.String" itemvalue="Application.AccountService" />
     </list>
+    <recent_temporary>
+      <list size="1">
+        <item index="0" class="java.lang.String" itemvalue="Application.AccountService" />
+      </list>
+    </recent_temporary>
     <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
       <Host>localhost</Host>
       <Port>5050</Port>
@@ -801,9 +834,9 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/task/entity/Task.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/task/service/Common.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="13" selection-start="189" selection-end="189" vertical-scroll-proportion="0.0">
+        <state line="33" column="19" selection-start="847" selection-end="847" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -815,40 +848,44 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/task/service/AccountService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="46" column="21" selection-start="1206" selection-end="1206" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1490#1506#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/task/entity/Task.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="114" column="30" selection-start="2126" selection-end="2126" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1775#1791#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/task/service/TaskService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="29" column="86" selection-start="861" selection-end="861" vertical-scroll-proportion="0.0">
+        <state line="89" column="26" selection-start="2668" selection-end="2683" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/task/controller/TaskController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="56" column="32" selection-start="1807" selection-end="1807" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/task/service/Common.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="35" column="50" selection-start="924" selection-end="924" vertical-scroll-proportion="0.0">
+        <state line="113" column="26" selection-start="3914" selection-end="3914" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/task/controller/AccountController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="38" column="72" selection-start="1145" selection-end="1145" vertical-scroll-proportion="0.0">
+        <state line="39" column="41" selection-start="1189" selection-end="1196" vertical-scroll-proportion="0.26912183">
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/task/service/AccountService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="53" column="51" selection-start="1468" selection-end="1468" vertical-scroll-proportion="0.6770538">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>

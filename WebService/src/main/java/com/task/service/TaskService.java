@@ -27,8 +27,9 @@ public class TaskService extends Common {
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
             String now = df.format(new Date());// new Date()为获取当前系统时间
             String sql = "INSERT INTO task(title, description, status, uid, dtime, ctime, utime) " +
-                    "VALUES('" + task.getTitle() + "','" + task.getDescription() + "','" + task.getStatus() +
-                    "','" + task.getUid() + "','2011-11-11 00:00:00','" + now + "','" + now + "')";
+                    "VALUES('" + task.getTitle() + "','" + task.getDescription() + "'," + task.getStatus() +
+                    "," + task.getUid() + ",'2011-11-11 00:00:00','" + now + "','" + now + "')";
+            System.out.println(sql);
             stmt.executeUpdate(sql);
             rs = stmt.executeQuery("SELECT LAST_INSERT_ID() AS tid");
             task.setTid(rs.getInt("tid"));

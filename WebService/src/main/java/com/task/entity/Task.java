@@ -1,5 +1,8 @@
 package com.task.entity;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created with IntelliJ IDEA.
  * User: 豪杰
@@ -96,5 +99,19 @@ public class Task {
 
     public void setDtime(String dtime) {
         this.dtime = dtime;
+    }
+
+    public String toString() {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("tid", tid);
+        map.put("title", title);
+        map.put("description", description);
+        map.put("tags", tags);
+        map.put("status", status);
+        map.put("uid", uid);
+        map.put("ctime", ctime);
+        map.put("utime", utime);
+        map.put("dtime", dtime);
+        return map.toString();
     }
 }

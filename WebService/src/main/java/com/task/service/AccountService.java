@@ -6,6 +6,7 @@ import java.sql.*;
 import sun.jdbc.odbc.JdbcOdbcDriver;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -54,6 +55,8 @@ public class AccountService extends Common{
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("errcode", errcode);
         map.put("user", user);
+        TaskService ts = new TaskService();
+        System.out.println(ts.getTaskList(1));
         return map;
     }
 

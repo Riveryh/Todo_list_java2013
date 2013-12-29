@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.*;
+import java.util.ArrayList;
+
 import com.task.service.*;
 import com.task.entity.*;
 
@@ -100,6 +102,19 @@ public class TaskController {
 
     @RequestMapping(value = "/get/all")
     public void taskGetAllAction(HttpServletRequest request, HttpServletResponse response) {
-
+        int uid = 1;
+        TaskService ts = new TaskService();
+        ArrayList<Task> list = ts.getTaskList(uid);
+        response.setContentType("text/xml;charset=UTF-8");
+        response.setCharacterEncoding("UTF-8");
+        response.setHeader("Cache-Control", "no-cache");
+        PrintWriter out;
+        try {
+            out = response.getWriter();
+            out.print(list);// 用于返回对象参数
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }// 一定要response.setCharacterEncoding("UTF-8");后面，不然返回乱码
     }
 }
