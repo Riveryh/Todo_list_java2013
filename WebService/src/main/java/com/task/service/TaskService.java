@@ -55,7 +55,7 @@ public class TaskService extends Common {
                     "SET title='" + task.getTitle() + "', description='" + task.getDescription() +
                     "',status='" + task.getStatus() + "',dtime='" + task.getDtime() +
                     "', utime='" + now + "'" +
-                    "WHERE tid=" + task.getTid();
+                    "WHERE tid=" + task.getTid() + "AND uid=" + task.getUid();
             stmt.executeUpdate(sql);
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -73,7 +73,7 @@ public class TaskService extends Common {
     public void removeTask(Task task) {
         connectDB();
         try {
-            String sql = "DELETE FROM task WHERE tid=" + task.getTid();
+            String sql = "DELETE FROM task WHERE tid=" + task.getTid() +"AND uid=" + task.getUid();
             stmt.executeUpdate(sql);
         } catch (Exception e) {
             System.out.println(e.getMessage());
