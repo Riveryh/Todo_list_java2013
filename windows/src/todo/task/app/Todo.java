@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import todo.task.model.Task;
+import todo.task.model.TaskList;
 
 import todo.task.model.TodoTaskList;
 
@@ -21,10 +22,10 @@ public class Todo {
 		
 		
 		try{
-			_list = TodoTaskList.open(new File(fileName));
+			_list = (TodoTaskList) TaskList.open(new File(fileName));
 		}catch(IOException e1){
 			TodoTaskList.save(new File(fileName), new TodoTaskList(fileName));
-			_list = TodoTaskList.open(new File(fileName));
+			_list = (TodoTaskList) TaskList.open(new File(fileName));
 		}
 		
 		Scanner sc = new Scanner(System.in);

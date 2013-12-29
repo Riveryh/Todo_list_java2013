@@ -38,6 +38,7 @@ public class TodoTaskList extends TaskList {
      * @param filePath
      */
     public TodoTaskList(String filePath) {
+        
         __file = new File(filePath);
     }
 
@@ -81,14 +82,12 @@ public class TodoTaskList extends TaskList {
         return true;
     }
 
-    /*
-     public void add(String title){
-     this.add(new Task(title,this));
-     }
-     public void add(String title,Date dueDate){
-     this.add(new Task(title,dueDate,this));
-     }
+    /**
+     * 从列表中移除，但不移动到已删除列表中
+     * @param index
+     * @return 
      */
+    @Override
     public Task remove(int index) {
         System.out.println("TaskListRemove!");
         //先删除掉要删除的task；
@@ -104,12 +103,21 @@ public class TodoTaskList extends TaskList {
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        }
-        
-        //将已经删除的task添加到已删除列表中，如果这个列表本来就是已删除列表，则不理会
-        TaskList.deletedList.add(task);    
+        }   
         return task;
     }
+    
+    /**
+     * 真正的删除（移动到已删除列表中）
+     * @param order 
+     */
+    public Task delet(int order){
+        Task task = this.remove(order);
+        //将已经删除的task添加到已删除列表中
+        TaskList.deletedList.add(task); 
+        return task;
+    }
+    
 
     public void edit(int index, String title) {
         this.get(index).setTitle(title);
