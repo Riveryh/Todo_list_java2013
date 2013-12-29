@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultCellEditor;
+import javax.swing.JOptionPane;
 import javax.swing.Popup;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -118,6 +119,9 @@ public class TaskBox extends javax.swing.JPanel  implements ListBox{
         /**
          * 初始化扩展面板内容，保持与task数据的一致.
          */
+        if(task.getType()!=null){
+            this.jComboBox1.setSelectedItem(task.getType());
+        }
         this.setInputDueDate(_thisBox._task.getDueDate());
         this.setInputDiscription(_thisBox._task.getDiscription());
     }
@@ -256,6 +260,11 @@ public class TaskBox extends javax.swing.JPanel  implements ListBox{
         discriptionTextField.setEditable(false);
         discriptionTextField.setText("无备注");
         discriptionTextField.setPreferredSize(new java.awt.Dimension(215, 30));
+        discriptionTextField.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                discriptionTextFieldMouseClicked(evt);
+            }
+        });
         popupPanel.add(discriptionTextField);
 
         jLabel1.setText("分类");
@@ -266,7 +275,7 @@ public class TaskBox extends javax.swing.JPanel  implements ListBox{
         popupPanel.add(jComboBox1);
         popupPanel.add(filler1);
 
-        submitButton.setText("do");
+        submitButton.setText("收起");
         submitButton.setActionCommand("Y");
         submitButton.setPreferredSize(new java.awt.Dimension(64, 30));
         submitButton.addActionListener(new java.awt.event.ActionListener() {
@@ -391,6 +400,11 @@ public class TaskBox extends javax.swing.JPanel  implements ListBox{
         doSubmit();
     }//GEN-LAST:event_submitButtonActionPerformed
 
+    private void discriptionTextFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_discriptionTextFieldMouseClicked
+        String information = JOptionPane.showInputDialog("请输入备注", this.discriptionTextField.getText());
+        this.discriptionTextField.setText(information);
+    }//GEN-LAST:event_discriptionTextFieldMouseClicked
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox _checkBox;
     private javax.swing.JTextField _taskTitleField;
@@ -420,6 +434,7 @@ public class TaskBox extends javax.swing.JPanel  implements ListBox{
     private void doSubmit() {
         this._task.setDueDate(getInputDueDate());
         this._task.setDiscription(getInputDiscription());     
+        this._task.setType(jComboBox1.getSelectedItem().toString());
         pop.hide();
         _parent.updateUI();
     }

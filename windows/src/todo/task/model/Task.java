@@ -19,6 +19,7 @@ public class Task implements Serializable{
 	private Date __establishedDate;
 	private String __title;
 	private String __discription;
+        private String __type;
 	private boolean __isCompleted;
         private TodoTaskList __parent;
         private int __order;
@@ -208,4 +209,11 @@ public class Task implements Serializable{
         public int getTaskId(){
             return this.__taskId;
         }
+        public String getType(){
+           return __type;
+         }
+       public void setType(String type){
+           this.__type = type;
+           __parent.onTaskChanged(this);
+       }
 }
