@@ -30,7 +30,6 @@ import todo.task.model.Task;
 public class TaskBox extends javax.swing.JPanel  implements ListBox{
     private Task _task;
     private TaskBox _thisBox = this;
-    private DefaultCellEditor _dCE;
     private TaskListPanel _parent;
     private boolean _isExtended=false;
     private javax.swing.PopupFactory _popupFactory;
@@ -38,6 +37,10 @@ public class TaskBox extends javax.swing.JPanel  implements ListBox{
     private boolean _isDragged = false;
     private DragBoxListener dragListener;
     
+    /**
+     * 定义用户界面中一个任务盒子的高度，其他的界面元件尺寸以此为基准进行相对调整
+     * @author huangyuhan
+     */
     static int _HEIGHT= 45;   //global scale reference!所有的尺度都以此为基准
     static int _WIDTH = 6*_HEIGHT;
     static int _POPUP_HEIGHT = 150;
@@ -72,7 +75,6 @@ public class TaskBox extends javax.swing.JPanel  implements ListBox{
         _parent = parent;
         initComponents();
         this.refresh();    
-        _dCE = new DefaultCellEditor(new javax.swing.JTextField());        
         /**
          * 添加事件监听器.
          * 注册motionListener用来检测drag事件，
@@ -156,6 +158,10 @@ public class TaskBox extends javax.swing.JPanel  implements ListBox{
         return this._isDragged;
     }
   
+    /**
+     * 刷新界面中各个元件的状态
+     * @author huangyuhan
+     */
     private void refresh(){
         if(_task!=null){
             _checkBox.setSelected(_task.isCompleted());
@@ -163,6 +169,10 @@ public class TaskBox extends javax.swing.JPanel  implements ListBox{
         }
     }
    
+    /**
+     * 设置box的背景，用于在拖拽的时候改变颜色使用。
+     * @param bg 
+     */
     @Override
     public void setBackground(Color bg) {
         super.setBackground(bg); //To change body of generated methods, choose Tools | Templates.

@@ -24,11 +24,22 @@ import todo.task.model.TodoTaskList;
  */
 public class TaskListPanel extends javax.swing.JPanel implements 
             todo.task.util.TaskListListener{
-    
+    /**
+     * 此TaskListPanel对应的TaskList
+     * @author huangyuhan
+     */
     private TodoTaskList _list;
     private int _taskBoxCount=0;
-    private int _vgap=2;    //表示两个taskBox之间的间距；
+    /**
+     * 界面上表示两个taskBox之间的像素间距
+     * @author huangyuhan
+     */
+    private int _vgap=2;    
     private int _zOrder;
+    /**
+     * 缓存各个TaskBox组件，按照对应的task的order顺序存储.
+     * @author huangyuhan
+     */
     private LinkedList<Component> _taskBoxes;
     
     
@@ -164,7 +175,13 @@ public class TaskListPanel extends javax.swing.JPanel implements
     
     
 
-
+    /**
+     * 刷新当前视图中的所有组件的界面，
+     * 根据任务的前后日期关系会在界面中插入相应的日期分割标签。
+     * 注意：如果通过add(Task)方法和delet(ListBox)以外的方法增加或删除了任务，
+     * 需要调用reLoad()方法重新扫描整个TaskList，否则会出现显示与内容不同步的问题。
+     * @author huangyuhan
+     */
     @Override
     public void updateUI() {
         int _newPanelHeight;
@@ -275,6 +292,11 @@ public class TaskListPanel extends javax.swing.JPanel implements
         System.out.println(new Date().getTime());
     }
     
+    /**
+     * 返回特定点（以taskListPanel为坐标系的坐标）上的组件的顺序
+     * @param point
+     * @return 
+     */
     public int getIndexAtLocation(java.awt.Point point){
         int index;
         index = (int) (point.getY()/(_HEIGHT+_vgap)) + 1;

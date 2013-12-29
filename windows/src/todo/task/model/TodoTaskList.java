@@ -22,9 +22,17 @@ import todo.task.util.TaskListListener;
 
 public class TodoTaskList extends TaskList {
 
+    /**
+     * 用于保存本list的文件
+     * @author huangyuhan
+     */
     private File __file;
     
-    //必须将__listener标记为transient属性，不然序列化的时候会把整个taskListPanel都写进去！
+    
+    /**
+     *记录task内容发生变化时需要通知的对象， 序列化时不保存。
+     * @author huangyuhan
+     */
     private transient TaskListListener __listener;  
 
 
@@ -137,6 +145,11 @@ public class TodoTaskList extends TaskList {
         return buffer + "";
     }
     
+    /**
+     * 在当前任务列表中创建一个新的任务，并且返回该Task的引用.
+     * @return 
+     * @author huangyuhan
+     */
     public Task getNewTask(){
         Task __task = new Task("new Task"+size(),this);
         this.add(__task);
@@ -219,6 +232,11 @@ public class TodoTaskList extends TaskList {
         return list;
     }
 
+    /**
+     * 当Task内容改变后会调用此方法，通知GUI做出相应改变。
+     * @param task 
+     * @author: huangyuhan
+     */
     public void onTaskChanged(Task task) {
         if(__listener!=null){
             __listener.onTaskListChanged();
@@ -230,12 +248,21 @@ public class TodoTaskList extends TaskList {
         }
     }
 
+    /**
+     * 注册关联的用户界面组件以接受task内容更改的时的通知
+     * @param l 
+     */
     public void addTaskListListener(todo.task.util.TaskListListener l) {
         if (__listener == null) {
             __listener = l;
         }
     }
     
+    /**
+     * 调用此方法时会检查所有任务的截止日期，如果改截止日期已经过期（超过今天的日期），则将截止日期设为今天
+     * @author huangyuhan
+     * @since 2013-12-20
+     */
     public void updateDueDate(){
         if(this==TaskList.doneList) return;  //已完成列表不进行时间更新.
         Iterator<Task> it = this.iterator();
