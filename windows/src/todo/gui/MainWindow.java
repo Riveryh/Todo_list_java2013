@@ -19,25 +19,37 @@ public class MainWindow{
          * @throws ClassNotFoundException
          * @throws IOException 
          */
-	public static void mainWindow() throws ClassNotFoundException, IOException {
+	public static void mainWindow() {
             
-		TodoTaskList todoList;
-                TodoTaskList doneList;
+		TodoTaskList todoList = null;
+                TodoTaskList doneList = null;
 		String todoListFileName = "TodoListFile.dat";
                 String doneListFileName = "DoneListFile.dat";
                 
 		try{
 			todoList = TodoTaskList.open(new File(todoListFileName));
 		}catch(IOException e1){
-			TodoTaskList.save(new File(todoListFileName), new TodoTaskList(todoListFileName));
-			todoList = TodoTaskList.open(new File(todoListFileName));
-		}
+                        try {
+                            TodoTaskList.save(new File(todoListFileName), new TodoTaskList(todoListFileName));
+                            todoList = TodoTaskList.open(new File(todoListFileName));
+                        } catch(Exception e) {
+                            
+                        }
+		} catch(Exception e) {
+                    
+                }
                 try{
 			doneList = TodoTaskList.open(new File(doneListFileName));
 		}catch(IOException e1){
-			TodoTaskList.save(new File(doneListFileName), new TodoTaskList(doneListFileName));
-			doneList = TodoTaskList.open(new File(doneListFileName));
-		}
+                        try {
+                            TodoTaskList.save(new File(doneListFileName), new TodoTaskList(doneListFileName));
+                            doneList = TodoTaskList.open(new File(doneListFileName));
+                        } catch(Exception e) {
+                            
+                        }
+		} catch(Exception e) {
+                    
+                }
                 
                 TaskList.todoList = todoList;
                 TaskList.doneList = doneList;
@@ -51,6 +63,8 @@ public class MainWindow{
                     Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (UnsupportedLookAndFeelException ex) {
                     Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                } catch(Exception e) {
+                    
                 }
                 
                 UIManager.put("ScrollBar.width", new Integer(5)); //设置界面滚动条宽度
@@ -91,12 +105,5 @@ public class MainWindow{
             frame.setTitle("TODO");
             frame.pack();
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            try {
-                mainWindow();
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-            }
         }
 }

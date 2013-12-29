@@ -33,7 +33,7 @@ public class Common {
 
     protected void connectDB() {
         try{
-            Class.forName(DBDriver);	 //加载驱动器
+            Class.forName(DBDriver).newInstance();;	 //加载驱动器
             con= DriverManager.getConnection(connectionStr, DBUser, DBPwd);
             //连接数据库
             stmt=con.createStatement();   //创建Statement对象

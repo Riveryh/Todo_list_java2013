@@ -12,4 +12,6 @@ package todo.task.app;
  */
 public class Common {
     public static String home = "http://127.0.0.1:8080";
+    
+    public static int uid = 0;
 }

@@ -2,7 +2,9 @@ package com.task.service;
 
 import com.task.entity.*;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created with IntelliJ IDEA.
@@ -22,9 +24,11 @@ public class TaskService extends Common {
     public Task createTask(Task task) {
         connectDB();
         try {
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+            String now = df.format(new Date());// new Date()为获取当前系统时间
             String sql = "INSERT INTO task(title, description, status, uid, dtime, ctime, utime) " +
                     "VALUES('" + task.getTitle() + "','" + task.getDescription() + "','" + task.getStatus() +
-                    "','" + task.getUid() + "','2011-11-11 00:00:00','2011-11-11 00:00:00','2011-11-11 00:00:00')";
+                    "','" + task.getUid() + "','2011-11-11 00:00:00','" + now + "','" + now + "')";
             stmt.executeUpdate(sql);
             rs = stmt.executeQuery("SELECT LAST_INSERT_ID() AS tid");
             task.setTid(rs.getInt("tid"));
@@ -44,10 +48,12 @@ public class TaskService extends Common {
     public Task setTask(Task task) {
         connectDB();
         try {
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+            String now = df.format(new Date());// new Date()为获取当前系统时间
             String sql = "UPDATE task" +
                     "SET title='" + task.getTitle() + "', description='" + task.getDescription() +
                     "',status='" + task.getStatus() + "',dtime='" + task.getDtime() +
-                    "', utime='2011-11-11 00:00:00'" +
+                    "', utime='" + now + "'" +
                     "WHERE tid=" + task.getTid();
             stmt.executeUpdate(sql);
         } catch (Exception e) {

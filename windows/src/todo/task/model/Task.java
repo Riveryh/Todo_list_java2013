@@ -144,7 +144,7 @@ public class Task implements Serializable{
             String param = "title=" + this.__title + 
                             "&description=" + this.__discription + 
                             "&status=" + (this.__isCompleted ? 1 : 0) + 
-                            "&uid=" + Task.serialVersionUID;
+                            "&uid=" + Common.uid;
             String sr = HttpRequest.sendPost(Common.home + "/task/create", param);
             int taskId = Integer.parseInt(sr);
             this.__taskId = taskId;
@@ -183,6 +183,11 @@ public class Task implements Serializable{
                 return;
             }
             String param = "tid=" + this.__taskId;
+            String sr = HttpRequest.sendPost(Common.home + "/task/remove", param);
+        }
+        
+        public static void httpRemoveTask(int tid) {
+            String param = "tid=" + tid;
             String sr = HttpRequest.sendPost(Common.home + "/task/remove", param);
         }
 }

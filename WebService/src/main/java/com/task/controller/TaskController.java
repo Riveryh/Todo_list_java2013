@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.*;
 import com.task.service.*;
 import com.task.entity.*;
@@ -51,6 +52,9 @@ public class TaskController {
      */
     @RequestMapping(value = "/set", method = RequestMethod.POST)
     public void taskSetAction(HttpServletRequest request, HttpServletResponse response, Task task) {
+        HttpSession session = request.getSession();
+        int uid = (Integer)session.getAttribute("user_id");
+        System.out.println(uid);
         TaskService ts = new TaskService();
         task = ts.setTask(task);
         response.setContentType("text/xml;charset=UTF-8");

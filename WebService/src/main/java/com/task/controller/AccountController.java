@@ -36,6 +36,7 @@ public class AccountController {
         String email = user.getEmail();
         AccountService as = new AccountService();
         Map<String, Object> result = as.login(user.getEmail(), user.getPassword());
+        System.out.println(user.getEmail() + user.getPassword() + result);
         if((Integer)result.get("errcode") == 100) {
             user = (User)result.get("user");
             HttpSession session = request.getSession();
@@ -49,7 +50,7 @@ public class AccountController {
         PrintWriter out;
         try {
             out = response.getWriter();
-            out.print("aaa");// 用于返回对象参数
+            out.print(user.getUid());// 用于返回对象参数
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -69,14 +70,15 @@ public class AccountController {
         String password = user.getPassword();
         String email = user.getEmail();
         AccountService as = new AccountService();
-        //String result = AccountService.register(user);
+        Map<String, Object> result = as.register(user);
+        int uid = (Integer)result.get("uid");
         response.setContentType("text/xml;charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
         response.setHeader("Cache-Control", "no-cache");
         PrintWriter out;
         try {
             out = response.getWriter();
-            out.print(user.getPassword()+user.getUsername() + user.getEmail());// 用于返回对象参数
+            out.print(uid);// 用于返回对象参数
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

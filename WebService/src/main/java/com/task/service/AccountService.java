@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import java.sql.*;
 import sun.jdbc.odbc.JdbcOdbcDriver;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,8 +26,6 @@ public class AccountService extends Common{
     /**
      * 登录验证
      *
-     * @param String email
-     * @param String password
      * @return Map<String, Object>
      * @author wanghaojie<haojie0429@126.com>
      * @since 2013-11-29
@@ -34,16 +34,17 @@ public class AccountService extends Common{
         this.connectDB();
         User user = null;
         int errcode = 104;
+        System.out.println(sha1(password));
         try {
             String sql = "SELECT * FROM user WHERE email='" + email + "'" +
-                        "AND password='" + sha1(password) + "'";
+                        " AND password='" + sha1(password) + "'";
+            System.out.println(sql);
             rs = stmt.executeQuery(sql);
+            System.out.println(rs.getFetchSize());
             if(rs.next()) {
                 user.setEmail(email);
                 user.setUsername(rs.getString("username"));
                 user.setUid(rs.getInt("uid"));
-                user.setUtime(rs.getString("utime"));
-                user.setCtime(rs.getString("ctime"));
                 errcode = 100;
             }
         } catch(Exception e) {
@@ -59,26 +60,33 @@ public class AccountService extends Common{
     /**
      * 注册
      *
-     * @param User user
      * @return Map<String, Object>
      * @author wanghaojie<haojie0429@126.com>
      * @since 2013-11-29
      */
-    public int register(User user)
+    public Map<String, Object> register(User user)
     {
         this.connectDB();
         int uid = 0;
+        int errcode = 105;
         try {
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+            String now = df.format(new Date());// new Date()为获取当前系统时间
             String sql = "INSERT INTO user(email, username, password, ctime, utime) " +
-                        "VALUES('" + user.getEmail() + "','" + user.getUsername() + "','" + user.getPassword() +
-                        "','2011-11-11 00:00:00','2011-11-11 00:00:00')";
+                        "VALUES('" + user.getEmail() + "','" + user.getUsername() + "','" +    sha1(user.getPassword()) +
+                        "','" + now + "','" + now + "')";
             stmt.executeUpdate(sql);
             rs = stmt.executeQuery("SELECT LAST_INSERT_ID() AS uid");
-            uid = rs.getInt("uid");
+            if(rs.next()) {
+                uid = rs.getInt("uid");
+            }
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
         closeDB();
-        return uid;
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("errcode", errcode);
+        map.put("uid", uid);
+        return map;
     }
 }

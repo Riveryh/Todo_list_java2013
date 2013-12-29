@@ -8,7 +8,7 @@ package com.task.entity;
  * To change this template use File | Settings | File Templates.
  */
 public class User {
-    private int uid;
+    private int uid = 0;
 
     private String username;
 
