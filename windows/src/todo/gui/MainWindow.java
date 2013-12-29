@@ -8,6 +8,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
 import static todo.task.app.Todo.fileName;
+import todo.task.model.DeletedTaskList;
+import todo.task.model.TaskList;
 import todo.task.model.TaskList;
 import todo.task.model.TodoTaskList;
 
@@ -23,15 +25,17 @@ public class MainWindow{
             
 		TodoTaskList todoList = null;
                 TodoTaskList doneList = null;
+                DeletedTaskList deletedList = null;
 		String todoListFileName = "TodoListFile.dat";
                 String doneListFileName = "DoneListFile.dat";
+                String deletedListFileName = "DeletedListFile.dat";
                 
 		try{
-			todoList = TodoTaskList.open(new File(todoListFileName));
+			todoList = (TodoTaskList) TaskList.open(new File(todoListFileName));
 		}catch(IOException e1){
                         try {
-                            TodoTaskList.save(new File(todoListFileName), new TodoTaskList(todoListFileName));
-                            todoList = TodoTaskList.open(new File(todoListFileName));
+                            TaskList.save(new File(todoListFileName), new TodoTaskList(todoListFileName));
+                            todoList = (TodoTaskList) TaskList.open(new File(todoListFileName));
                         } catch(Exception e) {
                             
                         }
@@ -39,20 +43,32 @@ public class MainWindow{
                     
                 }
                 try{
-			doneList = TodoTaskList.open(new File(doneListFileName));
+			doneList = (TodoTaskList) TaskList.open(new File(doneListFileName));
 		}catch(IOException e1){
                         try {
-                            TodoTaskList.save(new File(doneListFileName), new TodoTaskList(doneListFileName));
-                            doneList = TodoTaskList.open(new File(doneListFileName));
+                            TaskList.save(new File(doneListFileName), new TodoTaskList(doneListFileName));
+                            doneList = (TodoTaskList) TaskList.open(new File(doneListFileName));
                         } catch(Exception e) {
                             
                         }
 		} catch(Exception e) {
                     
                 }
+                try{
+			deletedList = (DeletedTaskList) TaskList.open(new File(deletedListFileName));
+		}catch(IOException e1){
+                        try {
+                            TaskList.save(new File(deletedListFileName), new TodoTaskList(deletedListFileName));
+                            deletedList = (DeletedTaskList) TaskList.open(new File(deletedListFileName));
+                        } catch(Exception e) {
+                            
+                        }
+		} catch(Exception e) {                   
+                }
                 
                 TaskList.todoList = todoList;
                 TaskList.doneList = doneList;
+                TaskList.deletedList = deletedList;
                 
                 //设置界面样式为windows默认界面    
                 try {
@@ -70,7 +86,7 @@ public class MainWindow{
                 UIManager.put("ScrollBar.width", new Integer(5)); //设置界面滚动条宽度
 		
                 //JFrame.setDefaultLookAndFeelDecorated(true);
-		final JFrame frame=new TaskListFrame(todoList,doneList);
+		final JFrame frame=new TaskListFrame(todoList,doneList,deletedList);
                 //frame.setUndecorated(true);
                 
                 //因为去掉了标题栏，所以要添加鼠标监听器检测拖动
@@ -105,5 +121,6 @@ public class MainWindow{
             frame.setTitle("TODO");
             frame.pack();
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            mainWindow();
         }
 }

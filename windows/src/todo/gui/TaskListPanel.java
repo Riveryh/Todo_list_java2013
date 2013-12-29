@@ -61,6 +61,8 @@ public class TaskListPanel extends javax.swing.JPanel implements
         this();
         this._list=list;
         this.reLoad();
+        this._list.httpSync();
+        this.reLoad();
     }
     
     public void reLoad(){
@@ -332,7 +334,7 @@ public class TaskListPanel extends javax.swing.JPanel implements
     void delet(ListBox __box) {
         System.out.println("remove"+_taskBoxes.remove(__box));//先从内部的模块list中删除.
         System.out.println(_taskBoxes);
-        _list.remove(__box.getOrder());//再从_list数据列表中删除.
+        Task deletedTask = _list.delet(__box.getOrder());//再从_list数据列表中删除.
         this.updateUI();
     }
 

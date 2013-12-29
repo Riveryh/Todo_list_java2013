@@ -197,4 +197,10 @@ public class Task implements Serializable{
         public boolean getModified(){
             return this.__isModified;
         }
+        public void setTaskId(int Id){
+            this.__taskId = Id;
+        }
+        public int getTaskId(){
+            return this.__taskId;
+        }
 }

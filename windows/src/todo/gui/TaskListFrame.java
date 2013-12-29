@@ -5,15 +5,9 @@
  */
 package todo.gui;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.Iterator;
-import javax.swing.DefaultListModel;
-import javax.swing.JTextField;
-import todo.task.model.Task;
 import todo.task.model.TodoTaskList;
-import todo.gui.TaskBox;
 import todo.task.app.Todo;
+import todo.task.model.DeletedTaskList;
 
 /**
  *
@@ -23,6 +17,7 @@ public class TaskListFrame extends javax.swing.JFrame {
     
     private TodoTaskList _todoList;
     private TodoTaskList _doneList;
+    private DeletedTaskList _deletedList;
 
     /**
      * 构造函数，接受TaskList参数并将其引用保存在类中,
@@ -33,14 +28,28 @@ public class TaskListFrame extends javax.swing.JFrame {
      */
     public TaskListFrame() {  
     }
-    public TaskListFrame(TodoTaskList todoList,TodoTaskList doneList){
+    public TaskListFrame(TodoTaskList todoList,TodoTaskList doneList,DeletedTaskList deletedList){
         this();
         this.setUndecorated(true);
         _todoList = todoList;
         _doneList = doneList;
+        _deletedList = deletedList;
         _todoList.updateDueDate();//刷新所有过期任务的时间到今天.
-        initComponents();
-        
+        initComponents();        
+    }
+    
+    /**
+     * 调用此方法将和服务器端同步三个list,
+     * @author huangyuhan
+     * @since 2013-12-29
+     */
+    public void syncAllList(){
+        _todoList.httpSync();
+        _doneList.httpSync();
+        _deletedList.httpSync();
+        //刷新数据之后重新刷新视图。
+        taskListPanel1.reLoad();
+        taskListPanel2.reLoad();
     }
     
 

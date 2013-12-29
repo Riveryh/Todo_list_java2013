@@ -17,7 +17,7 @@ import java.util.LinkedList;
  *
  * @author huangyuhan
  */
-public class TaskList extends LinkedList<Task>{
+public abstract class TaskList extends LinkedList<Task>{
     public static TaskList todoList;
     public static TaskList doneList;
     public static TaskList deletedList;
@@ -28,13 +28,20 @@ public class TaskList extends LinkedList<Task>{
      */
     protected File __file;
     
+    public TaskList(){
+        
+    }
+    public TaskList(String filePath) {
+        __file = new File(filePath);
+    }
+    
      /**
      * 保存方法，将指定的TaskList类或者本类保存到指定的file文件中；
      *
      * @author river
      * @since 2013-11-18
      */
-    public static void save(File file, TodoTaskList list) throws IOException {
+    public static void save(File file, TaskList list) throws IOException {
         ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
         oos.writeObject(list);
         oos.close();
@@ -62,10 +69,15 @@ public class TaskList extends LinkedList<Task>{
      * @author river
      * @since 2013-11-18
      */
-    public static TodoTaskList open(File file) throws IOException, ClassNotFoundException {
+    public static TaskList open(File file) throws IOException, ClassNotFoundException {
         ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
-        TodoTaskList list = (TodoTaskList) ois.readObject();
+        TaskList list = (TaskList) ois.readObject();
         ois.close();
         return list;
     }
+    
+    /**
+     * 抽象类，定义该种列表的同步方式。
+     */
+    public abstract void httpSync();
 }
