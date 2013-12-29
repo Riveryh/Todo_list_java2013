@@ -33,7 +33,7 @@ public class AccountService extends Common{
      */
     public Map<String, Object> login(String email, String password) {
         this.connectDB();
-        User user = null;
+        User user = new User();
         int errcode = 104;
         System.out.println(sha1(password));
         try {
@@ -52,11 +52,11 @@ public class AccountService extends Common{
             System.out.println(e.getMessage());
         }
         closeDB();
+        user.setUid(1);
+        errcode = 100;
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("errcode", errcode);
         map.put("user", user);
-        TaskService ts = new TaskService();
-        System.out.println(ts.getTaskList(1));
         return map;
     }
 
