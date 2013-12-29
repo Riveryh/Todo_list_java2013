@@ -22,7 +22,7 @@ public class Task implements Serializable{
 	private boolean __isCompleted;
         private TodoTaskList __parent;
         private int __order;
-        private boolean __isDelete;
+        private boolean __isModified;
 	
 	
 	
@@ -138,7 +138,7 @@ public class Task implements Serializable{
          * @since 2013-12-25
          */
         public void httpCreate() {
-            if(this.__taskId != 0 || this.__isDelete) {
+            if(this.__taskId != 0 || this.__isModified) {
                 return;
             }
             String param = "title=" + this.__title + 
@@ -160,7 +160,7 @@ public class Task implements Serializable{
             if(this.__taskId == 0) {
                 this.httpCreate();
             }
-            if(this.__isDelete) {
+            if(this.__isModified) {
                 this.httpRemove();
                 return;
             }
@@ -189,5 +189,12 @@ public class Task implements Serializable{
         public static void httpRemoveTask(int tid) {
             String param = "tid=" + tid;
             String sr = HttpRequest.sendPost(Common.home + "/task/remove", param);
+        }
+        
+        public void setModified(boolean isModified){
+            this.__isModified = isModified;
+        }
+        public boolean getModified(){
+            return this.__isModified;
         }
 }

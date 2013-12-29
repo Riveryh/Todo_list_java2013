@@ -22,11 +22,7 @@ import todo.task.util.TaskListListener;
 
 public class TodoTaskList extends TaskList {
 
-    /**
-     * 用于保存本list的文件
-     * @author huangyuhan
-     */
-    private File __file;
+    
     
     
     /**
@@ -80,6 +76,7 @@ public class TodoTaskList extends TaskList {
 
     @Override
     public boolean add(Task task) {
+        //将新的任务添加到表的末尾
         this.add(size(), task);
         return true;
     }
@@ -108,6 +105,9 @@ public class TodoTaskList extends TaskList {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        
+        //将已经删除的task添加到已删除列表中，如果这个列表本来就是已删除列表，则不理会
+        TaskList.deletedList.add(task);    
         return task;
     }
 
@@ -191,46 +191,7 @@ public class TodoTaskList extends TaskList {
         this.add(newOrder, temp);
     }
 
-    /**
-     * 保存方法，将指定的TaskList类或者本类保存到指定的file文件中；
-     *
-     * @author river
-     * @since 2013-11-18
-     */
-    public static void save(File file, TodoTaskList list) throws IOException {
-        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
-        oos.writeObject(list);
-        oos.close();
-    }
 
-    public void save(File file) throws IOException {
-        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
-        oos.writeObject(this);
-        oos.close();
-    }
-
-    public void save() throws IOException {
-        if (__file != null) {
-            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(__file));
-            oos.writeObject(this);
-            oos.close();
-        } else {
-            throw new IOException("The list file is not determined");
-        }
-    }
-
-    /**
-     * 打开文件方法，将指定的File文件中的TaskList对象读出，返回该对象的引用；
-     *
-     * @author river
-     * @since 2013-11-18
-     */
-    public static TodoTaskList open(File file) throws IOException, ClassNotFoundException {
-        ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
-        TodoTaskList list = (TodoTaskList) ois.readObject();
-        ois.close();
-        return list;
-    }
 
     /**
      * 当Task内容改变后会调用此方法，通知GUI做出相应改变。
@@ -272,6 +233,24 @@ public class TodoTaskList extends TaskList {
             _task = it.next();
             if(_task.getDueDate().before(today)){
                 _task.setDueDate(today);
+            }
+        }
+    }
+    
+    /**
+     * 判断任务列表中的所有任务同步后是否经过更改,如果有任务被更改则返回true,
+     * 否则返回false
+     * @author huangyuhan
+     * @return 
+     * @since 2013-12-29
+     */
+    public void httpSync(){
+        Iterator<Task> it = this.iterator();
+        Task _task=null;
+        while(it.hasNext()){
+            _task = it.next();
+            if(_task.getModified()){
+                _task.httpSet();
             }
         }
     }

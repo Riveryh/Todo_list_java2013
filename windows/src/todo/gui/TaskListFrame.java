@@ -40,6 +40,7 @@ public class TaskListFrame extends javax.swing.JFrame {
         _doneList = doneList;
         _todoList.updateDueDate();//刷新所有过期任务的时间到今天.
         initComponents();
+        
     }
     
 
